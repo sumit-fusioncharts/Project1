@@ -1,0 +1,18 @@
+{
+    "Chart":{
+                 "caption":" Name of the chart",
+                 "xAxisTitle":"months",
+                 "yAxisTitles":["downloads","views","purchased"],
+                 "yAxisTicks":[5,5,5],
+                 "renderAt": "container",
+                 "width": "550",
+                 "height": "350",
+                 "separator": "|"
+             },"chartdata": {
+
+                 "xAxis" : ["JAN","FEB","MAR","APR","MAY","JUN"],
+                 "yAxis1" : ["120","270","185","235","400","320"],
+                 "yAxis2" : ["3100","3910","3500","3800","1730","1060"],
+                 "yAxis3" : ["0.25","0.33","0.4","0.25","0.14","0.35"]
+  }          
+}

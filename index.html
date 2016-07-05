@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JavaScript Get Json</title>
+  <script type="text/javascript" src="chartlibrary.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+  var xmlhttp= new XMLHttpRequest(),json;
+  xmlhttp.onreadystatechange = function(){
+  	if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
+  		//console.log('working');
+  		json = JSON.parse(xmlhttp.responseText);
+  		console.log(json); 
+  	}
+  };
+  xmlhttp.open('GET','dataS.json',true);
+  xmlhttp.send();
+  //fc.alert();
+  </script>
+</body>
+</html>
