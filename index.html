@@ -2,21 +2,38 @@
 <html lang="en">
 <head>
   <title>JavaScript Get Json</title>
-  <script type="text/javascript" src="chartlibrary.js"></script>
+  <script type="text/javascript" src="parsinglibrary.js"></script>
+  <style type="text/css">
+    #main{
+      margin: 4px;
+      background-color: #ccc;
+    }
+    #mychart{
+      position: absolute;
+      top:0px;
+      left: 0px;
+      margin: 10px;
+    }
+  </style>
 </head>
 <body>
+  <div id="mychart">
+
+  </div> 
+
   <script type="text/javascript">
-  var xmlhttp= new XMLHttpRequest(),json;
-  xmlhttp.onreadystatechange = function(){
-  	if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
-  		//console.log('working');
-  		json = JSON.parse(xmlhttp.responseText);
-  		console.log(json); 
-  	}
+      var json,mychart;
+      var xmlhttp= new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function(){   
+        if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
+          mychart = new fc("mychart","|",600,600,JSON.parse(xmlhttp.responseText));
+          mychart.render();
+        }
   };
-  xmlhttp.open('GET','dataS.json',true);
+  xmlhttp.open('GET','jsondata.json',true);
   xmlhttp.send();
-  //fc.alert();
   </script>
+
+
 </body>
 </html>
