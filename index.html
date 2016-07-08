@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JavaScript Get Json</title>
+  <script type="text/javascript" src="parsinglibrary.js"></script>
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+
+  <script type="text/javascript">
+      var json,mychart;
+      var xmlhttp= new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function(){   
+        if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
+          mychart = new fc("mychart","|",600,600,JSON.parse(xmlhttp.responseText));
+          mychart.render();
+        }
+  };
+  xmlhttp.open('GET','jsondata.json',true);
+  xmlhttp.send();
+  </script>
+
+
+</body>
+</html>
