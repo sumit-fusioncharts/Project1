@@ -147,144 +147,95 @@ function fc(renderdivId,separator,width,height,chartdata) {
             }
     };
     this.measureMent = function(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,item){
-        console.log(xaxisticks+" "+yaxisticks+" "+newmax+" "+newmin);
-        var divisionX = (this.width) / xaxisticks;
-        var divisiony = (this.height) / yaxisticks;
-        var plotRatio = (this.height-divisiony) / newmax;
-        var dataset="",ycord,xcord;
+        var svgHeight = (this.height);
+        var svgWidth = (this.width);
+        var chartHeight=svgHeight-100;
+        var chartWidth=svgWidth-100;
+        var divisionX = (chartWidth) / xaxisticks;
+        var divisiony = (chartHeight) / yaxisticks;
+        var plotRatio = (chartHeight-divisiony) / newmax;
+        var dataset="",ycord,xcord,marginxy = 50;
+        var calculationX,calculationY ;
 
             for(var k in this.chartdata.dataset){
                 //console.log(this.chartdata.dataset[k].data[i]);
-                xcord= (divisionX*(parseInt(k)+1));
-                ycord = this.height-(divisiony+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
+                xcord= (divisionX*(parseInt(k)+1))+marginxy;
+                ycord = marginxy+chartHeight-(divisiony+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
                 dataset += xcord+","+ycord+" ";
             }
-            this.drawChart(dataset,divisiony,divisionX,xaxisticks,yaxisticks,newmax,newmin,item);
-            dataset = "";
-    };
-    this.drawChart = function(dataset,divisiony,divisionX,xaxisticks,yaxisticks,newmax,newmin,item){
-        var svgHeight = (this.height);
-        var svgWidth = (this.width);
-        var chartHeight=svgHeight;
-        var chartWidth=svgWidth;
+        
         console.log(svgHeight+" "+svgWidth+" "+chartHeight+" "+chartWidth+" "+divisiony+" "+divisionX+" "+yaxisticks+" "+xaxisticks);
 
 
-        var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 svg.setAttribute('width', svgWidth);
                 svg.setAttribute('height', svgHeight);
                 svg.setAttribute("style","width:100%; margin-left:5%; margin-top:5%;");
                 var url = "http://www.w3.org/2000/svg";
-                //var coordinates = pointStr.split(" ");
-                
-                var yax = document.createElementNS(url, "line");
-                yax.setAttributeNS(null, "x1",0);
-                yax.setAttributeNS(null, "y1", 0);
-                yax.setAttributeNS(null, "x2",0);
-                yax.setAttributeNS(null, "y2",chartHeight);
-                yax.setAttributeNS(null, "stroke", "green");
-                yax.setAttribute('style', "stroke:#000000; fill:none;");
-                svg.appendChild(yax);
 
-                var xax = document.createElementNS(url, "line");
-                xax.setAttributeNS(null, "x1",0);
-                xax.setAttributeNS(null, "y1",chartHeight);
-                xax.setAttributeNS(null, "x2",chartWidth+50);
-                xax.setAttributeNS(null, "y2",chartHeight);
-                xax.setAttributeNS(null, "stroke", "green");
-                xax.setAttribute('style', "stroke:#000000; fill:none;");
-                svg.appendChild(xax);
+                this.createLines(url,svg,marginxy,(marginxy-20),marginxy,(chartHeight+marginxy),"stroke:#000000; fill:none;");
+                this.createLines(url,svg,marginxy,(chartHeight+marginxy),(chartWidth+marginxy+20),(chartHeight+marginxy),"stroke:#000000; fill:none;");
+                this.createPoly(url,svg,dataset);
 
-                 var shape = document.createElementNS(url, "polyline");
-                 shape.setAttributeNS(null, "points", dataset);
-                 shape.setAttributeNS(null, "stroke", "green");
-                 shape.setAttribute('style', "stroke:#5BDE6C; fill:none;");
-                 svg.appendChild(shape); 
-                 var coordinates = dataset.split(" ");
-                 for(i = 0;i<(coordinates.length-1);i++){
-                     var xy =coordinates[i].split(",");
-                    console.log(xy);
-                     var shape = document.createElementNS(url, "circle");
-                         shape.setAttributeNS(null, "cx", xy[0]);
-                        shape.setAttributeNS(null, "cy", xy[1]);
-                         shape.setAttributeNS(null, "r",  4);
-                         shape.setAttributeNS(null, "fill", "rgba(46,139,87,0.6)");
-                         svg.appendChild(shape);
-                 }
-
-                var da ;
+                var coordinates = dataset.split(" "),xy;
+                for(i = 0;i<(coordinates.length-1);i++){               
+                    xy = coordinates[i].split(","); 
+                    this.createeCirles(url,svg,xy[0],xy[1],4);
+                }
                 
                 for(var i=0;i<xaxisticks;i++){
-                    da = parseInt(divisionX)*(i+1);
-                    var yax = document.createElementNS(url, "line");
-                        yax.setAttributeNS(null, "x1",da);
-                        yax.setAttributeNS(null, "y1",chartHeight);
-                        yax.setAttributeNS(null, "x2",da);
-                        yax.setAttributeNS(null, "y2",chartHeight-10);
-                        yax.setAttributeNS(null, "stroke", "green");
-                        yax.setAttribute('style', "stroke:#000000; fill:none;");
-                        svg.appendChild(yax);
-
-
-                        var val =this.chartdata.dataset[i].time;
-                        var newText = document.createElementNS(url,"text");
-                        // newText.setAttribute("style","margin-left:-10x");
-                        newText.setAttributeNS(null,"x",da-30);     
-                        newText.setAttributeNS(null,"y",chartHeight-10); 
-                        newText.setAttributeNS(null,"font-size","17");
-                        var textNode = document.createTextNode(val);
-                        newText.appendChild(textNode);
-                        svg.appendChild(newText);
-
+                    calculationX = parseInt(divisionX)*(i+1)+marginxy;
+                    this.createLines(url,svg,calculationX,(chartHeight+marginxy+5),calculationX,(chartHeight+marginxy-5),"stroke:#000000; fill:none;");
+                    var textVal =this.chartdata.dataset[i].time;
+                    this.createText(url,svg,(calculationX-30),(chartHeight+marginxy+25),textVal);
                 }
+
                 var title = this.chartdata.chartinfo.yaxisnames[item];
-                var newText = document.createElementNS(url,"text");
-                    newText.setAttribute("style","stroke:#FF4500");
-                        newText.setAttributeNS(null,"x","45%");     
-                        newText.setAttributeNS(null,"y",20); 
-                        newText.setAttributeNS(null,"font-size","15");
-                        var textNode = document.createTextNode(title);
-                        newText.appendChild(textNode);
-                        svg.appendChild(newText);
+                this.createText(url,svg,'37%',(25),title);
 
                 for(i=0;i<yaxisticks;i++){
+                    calculationY =(parseInt(divisiony)*i)+marginxy;
+                    var titleY =newmax - Math.round((newmax/yaxisticks)*i);
 
-                    da =parseInt(divisiony)*i;
-
-                    var val =newmax - Math.round((newmax/yaxisticks)*i);
-                    var newText = document.createElementNS(url,"text");
-                    newText.setAttribute("style","stroke:#00BFFF");
-                        newText.setAttributeNS(null,"x",0);     
-                        newText.setAttributeNS(null,"y",da+15); 
-                        newText.setAttributeNS(null,"font-size","15");
-                        var textNode = document.createTextNode(val);
-                        newText.appendChild(textNode);
-                        svg.appendChild(newText);
-                        // document.getElementById("chart").appendChild(newText);
-
-
-
-                    var xax = document.createElementNS(url, "line");
-                        xax.setAttributeNS(null, "x1",0);
-                        xax.setAttributeNS(null, "y1",da);
-                        xax.setAttributeNS(null, "x2",10);
-                        xax.setAttributeNS(null, "y2",da);
-                        xax.setAttributeNS(null, "stroke", "green");
-                        xax.setAttribute('style', "stroke:#000000; fill:none;");
-                        svg.appendChild(xax);
-
-                    var xxax = document.createElementNS(url, "line");
-                        xxax.setAttributeNS(null, "x1",0);
-                        xxax.setAttributeNS(null, "y1",da);
-                        xxax.setAttributeNS(null, "x2",chartWidth+60);
-                        xxax.setAttributeNS(null, "y2",da);
-                        xxax.setAttributeNS(null, "stroke", "green");
-                        xxax.setAttribute('style', "stroke:rgba(72,118,255,0.7); stroke-width:0.3;stroke-dasharray:10,10 ; fill:none;");
-                        svg.appendChild(xxax);
-
-                }
-                
+                    this.createText(url,svg,(marginxy-40),(calculationY+5),titleY);
+                    this.createLines(url,svg,(marginxy-5),(calculationY),(marginxy+5),(calculationY),"stroke:#000000; fill:none;");
+                    this.createLines(url,svg,(marginxy+10),(calculationY),(chartWidth+marginxy+20),(calculationY),"stroke:rgba(72,118,255,0.7); stroke-width:0.3;stroke-dasharray:10,10 ; fill:none;");
+                }   
                 document.getElementById("chart").appendChild(svg);
+                dataset = "";
 
+    };
+    this.createLines = function(url,svg,x1,y1,x2,y2,styleStr){
+        var lineXY = document.createElementNS(url, "line");
+            lineXY.setAttributeNS(null, "x1",x1);
+            lineXY.setAttributeNS(null, "y1",y1);
+            lineXY.setAttributeNS(null, "x2",x2);
+            lineXY.setAttributeNS(null, "y2",y2);
+            lineXY.setAttribute('style', styleStr);
+            svg.appendChild(lineXY);
+    };
+    this.createeCirles = function(url,svg,x,y,r){
+            var shape = document.createElementNS(url, "circle");
+            shape.setAttributeNS(null, "cx", x);
+            shape.setAttributeNS(null, "cy", y);
+            shape.setAttributeNS(null, "r",  r);
+            shape.setAttributeNS(null, "fill", "rgba(46,139,87,0.6)");
+            svg.appendChild(shape);
+    };
+    this.createPoly = function(url,svg,dataset){
+        var shape = document.createElementNS(url, "polyline");
+        shape.setAttributeNS(null, "points", dataset);
+        shape.setAttributeNS(null, "stroke", "green");
+        shape.setAttribute('style', "stroke:#5BDE6C; fill:none;");
+        svg.appendChild(shape); 
+    };
+    this.createText = function(url,svg,x,y,textVal){
+        var newText = document.createElementNS(url,"text");
+            newText.setAttributeNS(null,"x",x);     
+            newText.setAttributeNS(null,"y",y); 
+            newText.setAttributeNS(null,"font-size","17");
+        var textNode = document.createTextNode(textVal);
+            newText.appendChild(textNode);
+            svg.appendChild(newText);
     };
 }//end of the library
