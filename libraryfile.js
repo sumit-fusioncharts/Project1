@@ -47,7 +47,7 @@ function fc(renderdivId,separator,width,height,chartdata) {
                   var lllength = ll.length;
                   var cnt; 
                   //lengths of the strings retrived
-                  //console.log(ullength+" "+lllength);
+                  console.log("max element length: "+ullength+" "+ul);
                   //data does not have leading zeros
                   if(ul[0]==0){
                     cnt=0;
@@ -70,7 +70,9 @@ function fc(renderdivId,separator,width,height,chartdata) {
                   }else{
                     ul = ul.substr(0,1);
                     ul = (parseInt(ul)+1).toString();
+                    console.log("now ul :"+ul);
                     ul = this.placezeros(ul,ullength,1);
+                    console.log("now ul :"+ul);
                   }
                   if(ll[0]==0){
                     cnt=0;
@@ -90,6 +92,7 @@ function fc(renderdivId,separator,width,height,chartdata) {
                     ll = ll.substr(0,1);
                     ll = this.placezeros(ll,lllength,1);
                   }
+                   console.log([ul,ll]);
                    return [ul,ll]; 
                 };
      function calculateMaxMin(obj){
@@ -136,23 +139,24 @@ function fc(renderdivId,separator,width,height,chartdata) {
                         newmin = min.toString();
                     }           
                 limits = this.createlimits(newmax,newmin);
+                newmax = limits[0]; newmin = limits[1];
                 yaxisticks= this.calPicks(parseInt(limits[0]),parseInt(limits[1]));
-                xaxisticks= this.chartdata.dataset.length;
-                
+                xaxisticks= this.chartdata.dataset.length;              
                 this.measureMent(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,k);
+                
             }
     };
     this.measureMent = function(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,item){
-        //console.log(xaxisticks+" "+yaxisticks+" "+newmax+" "+newmin);
+        console.log(xaxisticks+" "+yaxisticks+" "+newmax+" "+newmin);
         var divisionX = (this.width) / xaxisticks;
         var divisiony = (this.height) / yaxisticks;
-        var plotRatio = (this.height-2*divisiony) / newmax;
+        var plotRatio = (this.height-divisiony) / newmax;
         var dataset="",ycord,xcord;
 
             for(var k in this.chartdata.dataset){
                 //console.log(this.chartdata.dataset[k].data[i]);
                 xcord= (divisionX*(parseInt(k)+1));
-                ycord = (divisionX+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
+                ycord = this.height-(divisiony+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
                 dataset += xcord+","+ycord+" ";
             }
             this.drawChart(dataset,divisiony,divisionX,xaxisticks,yaxisticks,newmax,newmin,item);
@@ -185,7 +189,7 @@ function fc(renderdivId,separator,width,height,chartdata) {
                 var xax = document.createElementNS(url, "line");
                 xax.setAttributeNS(null, "x1",0);
                 xax.setAttributeNS(null, "y1",chartHeight);
-                xax.setAttributeNS(null, "x2",chartWidth);
+                xax.setAttributeNS(null, "x2",chartWidth+50);
                 xax.setAttributeNS(null, "y2",chartHeight);
                 xax.setAttributeNS(null, "stroke", "green");
                 xax.setAttribute('style', "stroke:#000000; fill:none;");
@@ -272,7 +276,7 @@ function fc(renderdivId,separator,width,height,chartdata) {
                     var xxax = document.createElementNS(url, "line");
                         xxax.setAttributeNS(null, "x1",0);
                         xxax.setAttributeNS(null, "y1",da);
-                        xxax.setAttributeNS(null, "x2",chartWidth);
+                        xxax.setAttributeNS(null, "x2",chartWidth+60);
                         xxax.setAttributeNS(null, "y2",da);
                         xxax.setAttributeNS(null, "stroke", "green");
                         xxax.setAttribute('style', "stroke:rgba(72,118,255,0.7); stroke-width:0.3;stroke-dasharray:10,10 ; fill:none;");
