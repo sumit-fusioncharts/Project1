@@ -47,7 +47,6 @@ function fc(renderdivId,separator,width,height,chartdata) {
                   var lllength = ll.length;
                   var cnt; 
                   //lengths of the strings retrived
-                  console.log("max element length: "+ullength+" "+ul);
                   //data does not have leading zeros
                   if(ul[0]==0){
                     cnt=0;
@@ -70,9 +69,7 @@ function fc(renderdivId,separator,width,height,chartdata) {
                   }else{
                     ul = ul.substr(0,1);
                     ul = (parseInt(ul)+1).toString();
-                    console.log("now ul :"+ul);
                     ul = this.placezeros(ul,ullength,1);
-                    console.log("now ul :"+ul);
                   }
                   if(ll[0]==0){
                     cnt=0;
@@ -92,7 +89,6 @@ function fc(renderdivId,separator,width,height,chartdata) {
                     ll = ll.substr(0,1);
                     ll = this.placezeros(ll,lllength,1);
                   }
-                   console.log([ul,ll]);
                    return [ul,ll]; 
                 };
      function calculateMaxMin(obj){
@@ -141,9 +137,8 @@ function fc(renderdivId,separator,width,height,chartdata) {
                 limits = this.createlimits(newmax,newmin);
                 newmax = limits[0]; newmin = limits[1];
                 yaxisticks= this.calPicks(parseInt(limits[0]),parseInt(limits[1]));
-                xaxisticks= this.chartdata.dataset.length;              
-                this.measureMent(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,k);
-                
+                xaxisticks= this.chartdata.dataset.length; 
+                this.measureMent(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,k);                
             }
     };
     this.measureMent = function(xaxisticks,yaxisticks,newmax,newmin,yaxisticks,xaxisticks,item){
@@ -153,28 +148,24 @@ function fc(renderdivId,separator,width,height,chartdata) {
         var chartWidth=svgWidth-100;
         var divisionX = (chartWidth) / xaxisticks;
         var divisiony = (chartHeight) / yaxisticks;
-        var plotRatio = (chartHeight-divisiony) / newmax;
+        var plotRatio = (chartHeight) / newmax;
         var dataset="",ycord,xcord,marginxy = 50;
-        var calculationX,calculationY ;
+        var calculationX,calculationY,textColor="#000";
 
             for(var k in this.chartdata.dataset){
-                //console.log(this.chartdata.dataset[k].data[i]);
                 xcord= (divisionX*(parseInt(k)+1))+marginxy;
-                ycord = marginxy+chartHeight-(divisiony+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
+                ycord = 3*marginxy+chartHeight-(divisiony+Math.round(this.chartdata.dataset[k].data[item]*plotRatio));
                 dataset += xcord+","+ycord+" ";
             }
-        
-        console.log(svgHeight+" "+svgWidth+" "+chartHeight+" "+chartWidth+" "+divisiony+" "+divisionX+" "+yaxisticks+" "+xaxisticks);
-
 
             var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 svg.setAttribute('width', svgWidth);
                 svg.setAttribute('height', svgHeight);
-                svg.setAttribute("style","width:100%; margin-left:5%; margin-top:5%;");
+                svg.setAttribute("style"," margin:20px;");
                 var url = "http://www.w3.org/2000/svg";
 
-                this.createLines(url,svg,marginxy,(marginxy-20),marginxy,(chartHeight+marginxy),"stroke:#000000; fill:none;");
-                this.createLines(url,svg,marginxy,(chartHeight+marginxy),(chartWidth+marginxy+20),(chartHeight+marginxy),"stroke:#000000; fill:none;");
+                this.createLines(url,svg,(marginxy),(marginxy-20),(marginxy),(chartHeight+marginxy+20),"stroke:#000000; fill:none;");
+                this.createLines(url,svg,(marginxy),(chartHeight+marginxy+20),(chartWidth+marginxy+20),(chartHeight+marginxy+20),"stroke:#000000; fill:none;");
                 this.createPoly(url,svg,dataset);
 
                 var coordinates = dataset.split(" "),xy;
@@ -185,17 +176,17 @@ function fc(renderdivId,separator,width,height,chartdata) {
                 
                 for(var i=0;i<xaxisticks;i++){
                     calculationX = parseInt(divisionX)*(i+1)+marginxy;
-                    this.createLines(url,svg,calculationX,(chartHeight+marginxy+5),calculationX,(chartHeight+marginxy-5),"stroke:#000000; fill:none;");
+                    this.createLines(url,svg,calculationX,(chartHeight+marginxy+25),calculationX,(chartHeight+marginxy+15),"stroke:#000000; fill:none;");
                     var textVal =this.chartdata.dataset[i].time;
-                    this.createText(url,svg,(calculationX-30),(chartHeight+marginxy+25),textVal);
+                    this.createText(url,svg,(calculationX-30),(chartHeight+marginxy+45),textVal);
                 }
 
                 var title = this.chartdata.chartinfo.yaxisnames[item];
-                this.createText(url,svg,'37%',(25),title);
+                this.createText(url,svg,'50%',(25),title);
 
-                for(i=0;i<yaxisticks;i++){
+                for(i=0;i<=yaxisticks;i++){
                     calculationY =(parseInt(divisiony)*i)+marginxy;
-                    var titleY =newmax - Math.round((newmax/yaxisticks)*i);
+                    var titleY =newmax - Math.round(((newmax-newmin)/yaxisticks)*i);
 
                     this.createText(url,svg,(marginxy-40),(calculationY+5),titleY);
                     this.createLines(url,svg,(marginxy-5),(calculationY),(marginxy+5),(calculationY),"stroke:#000000; fill:none;");
@@ -203,7 +194,6 @@ function fc(renderdivId,separator,width,height,chartdata) {
                 }   
                 document.getElementById("chart").appendChild(svg);
                 dataset = "";
-
     };
     this.createLines = function(url,svg,x1,y1,x2,y2,styleStr){
         var lineXY = document.createElementNS(url, "line");
@@ -225,15 +215,16 @@ function fc(renderdivId,separator,width,height,chartdata) {
     this.createPoly = function(url,svg,dataset){
         var shape = document.createElementNS(url, "polyline");
         shape.setAttributeNS(null, "points", dataset);
-        shape.setAttributeNS(null, "stroke", "green");
         shape.setAttribute('style', "stroke:#5BDE6C; fill:none;");
         svg.appendChild(shape); 
     };
-    this.createText = function(url,svg,x,y,textVal){
+    this.createText = function(url,svg,x,y,textVal,textColor){
         var newText = document.createElementNS(url,"text");
             newText.setAttributeNS(null,"x",x);     
             newText.setAttributeNS(null,"y",y); 
             newText.setAttributeNS(null,"font-size","17");
+            newText.setAttributeNS(null,"text-anchor","start");
+            newText.setAttributeNS(null, "fill", textColor);
         var textNode = document.createTextNode(textVal);
             newText.appendChild(textNode);
             svg.appendChild(newText);
