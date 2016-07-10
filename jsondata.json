@@ -2,7 +2,7 @@
     "chartinfo":{
         "caption":"My company chart",
         "xaxisname":"Dates",
-        "yaxisnames":["sales","profit","tax"]
+        "yaxisnames":["Sales","Profit","Tax"]
     },"dataset":
     [{
         "time":"10-12-11",
@@ -12,13 +12,13 @@
         "data":[17,132,1.1]
     },{
         "time":"13-12-11",
-        "data":[1,132,2.1]
+        "data":[1,102,2.1]
     },{
         "time":"14-12-11",
         "data":[140,123,4.1]
     },{
         "time":"15-12-11",
-        "data":[105,125,5.6]
+        "data":[105,195,5.6]
     },{
         "time":"16-12-11",
         "data":[100,152,7.1]
