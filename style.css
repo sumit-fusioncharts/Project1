@@ -1,0 +1,14 @@
+#circle:hover{
+      fill: red;
+      box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+#lines:hover{
+  stroke:red;
+}
+.chartContainer{
+    margin-left:5px; 
+}
+#tooltipDiv{
+      height: 20px;
+      width: 90px;
+}
