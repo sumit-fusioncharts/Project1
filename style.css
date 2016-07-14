@@ -1,6 +1,7 @@
 #circle:hover{
-      fill: red;
-      box-shadow: 0 0 2px rgba(0,0,0,0.4);
+      fill: #2CABA9;
+      -webkit-transition: fill 1s, -webkit-transform 1s;
+    transition: fill 1s, transform 1s;
 }
 #lines:hover{
   stroke:red;

@@ -17,7 +17,7 @@
       var xmlhttp= new XMLHttpRequest();
       xmlhttp.onreadystatechange = function(){   
         if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
-          mychart = new fc("mychart","|",800,700,JSON.parse(xmlhttp.responseText));
+          mychart = new fc("mychart","|",600,500,JSON.parse(xmlhttp.responseText));
           mychart.render();
         }
   };
