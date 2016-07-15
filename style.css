@@ -1,0 +1,15 @@
+#circle:hover{
+      fill: #2CABA9;
+      -webkit-transition: fill 1s, -webkit-transform 1s;
+    transition: fill 1s, transform 1s;
+}
+#lines:hover{
+  stroke:red;
+}
+.chartContainer{
+    margin-left:5px; 
+}
+#tooltipDiv{
+      height: 20px;
+      width: 90px;
+}
