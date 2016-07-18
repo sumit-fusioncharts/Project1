@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JavaScript Get Json</title>
+  <script type="text/javascript" src="js/libraryfile.js"></script>
+  <link type="text/css" href="style/style.css" rel="stylesheet"/>
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+  
+  <div class="chartContainer" id="chart"></div>
+
+  <script type="text/javascript">
+      var xmlhttp= new XMLHttpRequest(),mychart;
+      xmlhttp.onreadystatechange = function(){   
+        if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
+          mychart = new Multivariant(JSON.parse(xmlhttp.responseText));
+          mychart.render();
+        }
+  };
+  xmlhttp.open('GET','data/jsondata.json',true);
+  xmlhttp.send();
+  </script>
+
+
+</body>
+</html>
