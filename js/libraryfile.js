@@ -4,7 +4,7 @@ function Multivariant(chartdata) {
     var separator = (chartdata.chartinfo.dataseparator === "") ? "|" : chartdata.chartinfo.dataseparator;
     var svgWidth = (chartdata.chartinfo.width === '') ? "300" : chartdata.chartinfo.width;
     var svgHeight = (chartdata.chartinfo.height === '') ? "400" : chartdata.chartinfo.height;
-    var chartHeight=svgHeight-150;
+    var chartHeight=svgHeight-100;
     var chartWidth=svgWidth-100;
     var noOfGraphs = Chartdata.dataset.length;
     var xaxisticksNames = (Chartdata.timestamp.time).split(separator);
@@ -221,17 +221,21 @@ function Multivariant(chartdata) {
             var url = "http://www.w3.org/2000/svg";
             var svg = document.createElementNS(url, "svg");
                 svg.setAttribute('width', svgWidth);
-                svg.setAttribute('height', svgHeight);
+                if(item==(noOfGraphs-1)){
+                    svg.setAttribute('height', Number(svgHeight)+50);
+                }else{
+                    svg.setAttribute('height', svgHeight);
+                }  
                 svg.setAttribute('id', "svgContainer");
                 svg.setAttribute("class"," svgclass");
                //caption and SubCaption
                 if(item==0){//url,svg,x,y,textVal,textColor,fontSize,pos,textStyle,textClass,xPos
                     this.createText(url,svg,25+(svgWidth)/2-marginxy/2,25,Chartdata.chartinfo.caption,"#000",20,"middle","font-weight:bold; font-family:tahoma;","caption");
-                    this.createText(url,svg,25+(svgWidth)/2-marginxy/2,43,Chartdata.chartinfo.subCaption,15,"middle","font-family:tahoma;","subCaption");
+                    this.createText(url,svg,25+(svgWidth)/2-marginxy/2,43,Chartdata.chartinfo.subCaption,"#28223E",15,"middle","font-family:arial;","subCaption");
                 }
                 
                 title = Chartdata.dataset[item].title; //yaxis caption left
-                this.createText(url,svg,4,chartHeight/2+marginxy,title,'#0E2D48',12,"middle","writing-mode:tb;font-weight:bold;");
+                this.createText(url,svg,5,chartHeight/2+marginxy,title,'#0E2D48',13,"middle","writing-mode:tb;font-weight:bold;");
                 this.createRect(url,svg,marginxy,marginxy,chartHeight,chartWidth-50,"svgInnerRect","stroke:#000000;stroke-width:0.4; fill:transparent;","svgInnerRect");
 
 
@@ -282,7 +286,7 @@ function Multivariant(chartdata) {
                         this.createText(url,svg,(calculationX),(chartHeight+marginxy+35),textVal,"#145255",14,"middle","writing-mode:tb;","xaxisticksNames");
                     }
                     title = Chartdata.chartinfo.xaxisname; //xaxis caption bottom
-                    this.createText(url,svg,'50%',chartHeight+marginxy+70,title,'#0E2D48',15,"middle","","xaxisTitle");
+                    this.createText(url,svg,25+(svgWidth)/2-marginxy/2,chartHeight+marginxy+80,title,'#0E2D48',15,"middle","","xaxisTitle");
                 }
                 for(i = 0;i<(coordinates.length-1);i++){               
                     xy = coordinates[i].split(","); 
@@ -298,7 +302,7 @@ function Multivariant(chartdata) {
                 document.getElementById("chart").appendChild(br);
                 dataset = "";      
     };
-    this.setTitleX = function(x){
+    this.setTitleX = function(x){//not using right now
             x = x.split(",");
         var d = new Date();
             d.setFullYear(x[2], x[1], x[0]);
@@ -372,7 +376,7 @@ function Multivariant(chartdata) {
         }
     }
     function moveCrosshair(e){
-        var x = e.detail.x-svgWidth/2-marginxy-25+(screen.width-window.innerWidth)/2, y=e.detail.y,cdata,CtopX1,CtopX2,CtopY2,yT;
+        var x = e.detail.x-svgWidth/2+25+(svgWidth-700)+(screen.width-window.innerWidth)/2, y=e.detail.y,cdata,CtopX1,CtopX2,CtopY2,yT;
         var elements = document.getElementsByClassName("crosshair");
         var eRect = document.getElementsByClassName("tootltiprect");
         var uppertext = document.getElementsByClassName("uppertext");
