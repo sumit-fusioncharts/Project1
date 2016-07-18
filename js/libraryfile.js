@@ -1,7 +1,6 @@
 
 function Multivariant(chartdata) {
     var Chartdata = chartdata;
-   //this.renderdivId = "chart";
     var separator = (chartdata.chartinfo.dataseparator === "") ? "|" : chartdata.chartinfo.dataseparator;
     var svgWidth = (chartdata.chartinfo.width === '') ? "300" : chartdata.chartinfo.width;
     var svgHeight = (chartdata.chartinfo.height === '') ? "400" : chartdata.chartinfo.height;
@@ -405,10 +404,10 @@ function Multivariant(chartdata) {
                  
                  if((CtopX2-80)<(x+10)){
                     eRect[i].setAttribute("x",xT-100);
-                    uppertext[i].setAttribute("x",xT-50);
+                    uppertext[i].setAttribute("x",xT-55);
                  }else{
                     eRect[i].setAttribute("x",xT+10);
-                    uppertext[i].setAttribute("x",xT+50);
+                    uppertext[i].setAttribute("x",xT+55);
                  }   
                            
             uppertext[i].innerHTML=Multivariant.xCoor[i][j][3];
