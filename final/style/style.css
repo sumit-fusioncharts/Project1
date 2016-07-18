@@ -1,0 +1,32 @@
+#circle:hover{
+      fill: #2CABA9;
+      -webkit-transition: fill 1s, -webkit-transform 1s;
+    transition: fill 1s, transform 1s;
+}
+
+.chartContainer{
+    height: auto;
+    text-align:center;
+}
+#tooltipDiv{
+    height: 20px;
+    width: 90px;
+}
+.svgclass{
+	display: block;
+	margin: auto;
+	text-align: center;
+}
+.svgPoly{
+	  animation-name: draw;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;// Stay on the last frame
+    animation-iteration-count: 1; // Run only once
+    animation-timing-function: linear;
+  }
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

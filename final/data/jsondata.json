@@ -1,0 +1,23 @@
+{
+    "chartinfo":{
+        "caption":"Website Visitors",
+        "subCaption" : "Weekly Report",
+        "xaxisname":"Dates",
+        "width":"500",
+        "height":"400",
+        "dataseparator" : "|"
+    },"timestamp": 
+    {
+        "time":  "Jan 01|Jan 02|Jan 03|Jan 04|Jan 05|Jan 06|Jan 07"
+    },"dataset":
+    [{ 
+        "title":"Items Sold",
+        "data":"5||1||1|1"
+    },{
+        "title":"Visitors",
+        "data":"81||37||122|53|60"
+    },{
+        "title":"Man Power",
+        "data":"10|21|23|9||122|178"
+    }]       
+}
