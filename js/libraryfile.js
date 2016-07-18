@@ -227,7 +227,7 @@ function Multivariant(chartdata) {
                //caption and SubCaption
                 if(item==0){//url,svg,x,y,textVal,textColor,fontSize,pos,textStyle,textClass,xPos
                     this.createText(url,svg,25+(svgWidth)/2-marginxy/2,25,Chartdata.chartinfo.caption,"#000",20,"middle","font-weight:bold; font-family:tahoma;","caption");
-                    this.createText(url,svg,25+(svgWidth)/2-marginxy/2,40,Chartdata.chartinfo.subCaption,16,"middle","font-family:tahoma;","subCaption");
+                    this.createText(url,svg,25+(svgWidth)/2-marginxy/2,43,Chartdata.chartinfo.subCaption,15,"middle","font-family:tahoma;","subCaption");
                 }
                 
                 title = Chartdata.dataset[item].title; //yaxis caption left
@@ -379,6 +379,8 @@ function Multivariant(chartdata) {
         var crosshair = document.getElementsByClassName("crosshair");
         var svgRect = document.getElementById("svgsRect");
        
+
+
         for(var i = 0; i<elements.length; i++){
             elements[i].setAttribute("visibility","visible");
             elements[i].setAttribute("x1",x);
@@ -388,13 +390,13 @@ function Multivariant(chartdata) {
             if(Multivariant.xCoor[i][j][0]-10<x && Multivariant.xCoor[i][j][0]+10>x){
                 yT = Multivariant.xCoor[i][j][1];
                 xT = Multivariant.xCoor[i][j][0];
-                
+                //console.log(interpolate(x,xT,yT,Multivariant.xCoor[i][j+1][0],Multivariant.xCoor[i][j+1][1]));
                 uppertext[i].setAttribute("visibility","visible");
                 
                 CtopY2=crosshair[i].getAttribute("y2");
                 CtopX2=svgRect.getAttribute("width");
 
-                 if((CtopY2-40)<yT){
+                 if((CtopY2-60)<yT){
                     uppertext[i].setAttribute("y",yT-20);
                     eRect[i].setAttribute("y",yT-40);
                  }else{
@@ -420,6 +422,9 @@ function Multivariant(chartdata) {
         for(var i = 0; i<elements.length; i++){
                 elements[i].setAttribute("visibility","hidden");
             }
+    }
+    function interpolate(x,x1,y1,x2,y2){
+        return ((((x-x1)*(y2-y1))/(x2-x1))+y1);
     }
     this.createText = function(url,svg,x,y,textVal,textColor,fontSize,pos,textStyle,textClass,xPos){
         var newText = document.createElementNS(url,"text");
