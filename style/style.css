@@ -1,0 +1,40 @@
+#graphCircle:hover{
+      fill: #2CABA9;
+      -webkit-transition: fill 1s, -webkit-transform 1s;
+    transition: fill 1s, transform 1s;
+}
+#graphCircle{
+  stroke:#1F7ACB;
+  stroke-width:2;
+  fill:#fff;
+}
+.svgPoly{
+  fill:none;
+  stroke: #1F7ACB;
+  stroke-width:6;
+}
+.chartContainer{
+    height: auto;
+    width: 100%;
+    }
+.svgCaptionClass{
+  margin: 20px auto;
+  display: block;
+}
+.graphTopClass{
+  fill: #F5FAFF;
+  stroke: #077EE4;
+  stroke-width:0.2;
+}
+.axisRectClass{
+  fill: none;
+  stroke: #D2D2D2;
+}
+.xaxisticks{
+  stroke-width:0.2;
+  stroke: #000;
+}
+.yaxisticks{
+  stroke: #000;
+  stroke-width:0.2; 
+}
