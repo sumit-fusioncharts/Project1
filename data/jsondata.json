@@ -1,23 +1,32 @@
 {
     "chartinfo":{
-        "caption":"7 Days Report",
+        "caption":"Website Visitors",
         "subCaption" : "Weekly Report",
         "xaxisname":"Dates",
-        "width":"600",
-        "height":"500",
-        "dataseparator" : "|"
+        "width":"300",
+        "height":"300",
+        "dataseparator" : "|",
+        "chartType":"line",
+        "divId":"chart",
+        "chartsPositioning":"maxtomin"
     },"timestamp": 
     {
         "time":  "Jan 01|Jan 02|Jan 03|Jan 04|Jan 05|Jan 06|Jan 07"
     },"dataset":
     [{ 
         "title":"Items Sold",
-        "data":"||1||3|16"
+        "data":"||1||1|-13|85"
     },{
         "title":"Visitors",
-        "data":"8||7||12|5|60"
+        "data":"81||37||122|53|60"
     },{
         "title":"Man Power",
         "data":"10|21|23|9||122|178"
+    },{
+        "title":"Finance",
+        "data":"192432|213774|234243|324349|324545|185622|544345"
+    },{
+        "title":"Budget",
+        "data":"2432|2774|2437|2349|2545|2622|2345"
     }]       
 }
