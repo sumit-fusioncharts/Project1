@@ -1,0 +1,84 @@
+#graphCircle:hover{
+      fill: #2CABA9;
+      -webkit-transition: fill 1s, -webkit-transform 1s;
+    transition: fill 1s, transform 1s;
+}
+#graphCircle{
+  stroke:#1F7ACB;
+  stroke-width:2;
+  fill:#fff;
+}
+.svgPoly{
+  fill:none;
+  stroke: #1F7ACB;
+  stroke-width:6;
+}
+.chartContainer{
+    height: auto;
+    width: 100%;
+    }
+.svgCaptionClass{
+  margin: 20px auto;
+  display: block;
+}
+.graphTopClass{
+  fill: #F5FAFF;
+  stroke: #077EE4;
+  stroke-width:1;
+
+}
+.axisRectClass{
+  fill: none;
+  stroke: #D2D2D2;
+}
+.xaxisticks{
+  stroke-width:0.2;
+  stroke: #000;
+}
+.yaxisticks{
+  fill: #000;
+  stroke-width:0; 
+}.tootltiprect{
+  stroke:#6A463A;
+  stroke-width:0.6;
+  fill:#FFD9CC;
+}
+.uppertext{
+  fill: #6A463A;
+}
+.mainCaptionText{
+  fill:#077EE4;
+}
+.crosshair{
+  stroke:red;
+  stroke-width:1px;
+  stroke-dasharray:3,3;
+}
+.svgCrosshairRect{
+  fill: transparent;
+}
+.CaptionText{
+
+}
+.svGrectClass{
+  fill:#F7F7F7;
+  stroke: #DFDFDF;
+}
+.BigCaptionText{
+  font-family: tahoma; font-weight: bold;
+}
+.CaptionText{
+
+}
+.xaxisticksNames{
+  writing-mode:tb;
+}
+.columnRectClass{
+  fill:#1E7ACD;
+}
+.dragableDiv{
+  position: absolute;
+  border: 1px solid rgba(102, 0, 153,0.6);
+  background:rgba(0,0,0,0.3);
+
+}
