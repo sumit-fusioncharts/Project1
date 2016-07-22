@@ -182,7 +182,6 @@ Multivariant.prototype.render = function(){
                 xcord= (divisionX*i)+this.marginxy+5;
                 barHight = ((y-newmin)*plotRatio); 
                 ycord = (this.chartHeight - barHight+this.marginxy);             
-                //console.log(xcord+" "+ycord+" "+barHight+" "+divisionX);
 
                 //xCoor[datai][i]=[];
                 //xCoor[datai][i][0]=[xcord];
@@ -190,7 +189,7 @@ Multivariant.prototype.render = function(){
                 //xCoor[datai][i][2]=[y];
 
                 if(barHight<1){barHight=2;ycord=ycord-2;} 
-                this.createRect(url,svgGraph,xcord,ycord,barHight,divisionX-60,"columnRect","columnRectClass",y,datai,this.chartWidth);
+                this.createRect(url,svgGraph,xcord,ycord,barHight+5,divisionX-60,"columnRect","columnRectClass",y,datai,this.chartWidth);
             }
          }//successfully displaying Data String
       }
@@ -220,6 +219,7 @@ Multivariant.prototype.createCaption = function(url) {
    this.createText(url,svg,'50%',20,this.Chartdata.chartinfo.caption,"#000",22,"middle","BigCaptionText");
    this.createText(url,svg,'50%',40,this.Chartdata.chartinfo.subCaption,"#717171",16,"middle","CaptionText");
 };
+var currentElement = null;
 Multivariant.prototype.createSvg = function(url,svgW,svgH,svgId,svgClass,svgAppend){
    var svg = document.createElementNS(url, "svg");
        svg.setAttribute('width',svgW);
@@ -229,10 +229,32 @@ Multivariant.prototype.createSvg = function(url,svgW,svgH,svgId,svgClass,svgAppe
    svgAppend.appendChild(svg);
    if(svgId=="svgGraph"){
     svg.addEventListener("mousedown",function(event){
-      initDrag(event,svg);
-    },false)
+      event.preventDefault();
+      var startX = event.clientX;
+      var startY = event.clientY;
+      var dragable = document.createElement('div');
+          dragable.className = 'dragableDiv';
+          dragable.style.top = startY+"px";
+          dragable.style.left = startX+"px";
+      document.body.appendChild(dragable);
+      //initDrag(event,svg);
+      dragable.addEventListener('mousemove', function(event){mouseMoveHandler(event,startX,startY,dragable)});
+      dragable.addEventListener('mouseup', function(event){mouseUpHandler(event,dragable)});
+    });
    }
    return svg;
+}
+var mouseMoveHandler = function (e,x,y,dragable) {
+          e.preventDefault();
+          dragable.style.width = (e.pageX-x)+"px";
+          dragable.style.height = (e.pageY-y)+"px";
+}
+ 
+var mouseUpHandler = function (event,dragable) {
+        //currentElement = null;
+        dragable.removeEventListener('mousemove', mouseMoveHandler);
+        dragable.removeEventListener('mouseup', mouseUpHandler);
+        dragable = null;
 }
 function initDrag(event,svg){
   var startX = event.clientX;
@@ -251,13 +273,12 @@ function initDrag(event,svg){
   });
 }
 function stopDrag(e,svg){
-      //svg.removeEventListener('mousemove', dragdiv, false); 
-      //svg.onmouseup=null;
+      
 }
 function dragdiv(e,d,x,y){
   d.style.width = (e.pageX-x)+"px";
   d.style.height = (e.pageY-y)+"px";
-  //console.log(d.width);
+  
 }
 Multivariant.prototype.createText = function(url,svg,x,y,textVal,textColor,fontSize,pos,textClass){
         var newText = document.createElementNS(url,"text");
@@ -336,10 +357,9 @@ function highLightRect(event,rectX,rectY,value,i,wd){
   var colrollover = new CustomEvent("mouserollover",{
         "detail":{x:rectX,y:rectY,v:value,c:i,w:wd}
         });
-  for( var i=0;i<col.length;i++){
-    //console.log(this.xCoor+"hi");
-    if(col[i]!=event.target)
-      col[i].dispatchEvent(colrollover);
+    for( var i=0;i<col.length;i++){
+      if(col[i]!=event.target)
+        col[i].dispatchEvent(colrollover);
     }
 }
 function highLightColumn(e){
@@ -348,12 +368,7 @@ function highLightColumn(e){
   var uppertext = document.getElementsByClassName("uppertext");
   var xdisplacement,colnum,x,y;
 
-  //console.log(e.detail.c);
-  //cole= e.detail.c.split(",");
-  //console.log(Number(cole[0]));
-
     for(var j=0;j<col.length;j++){
-      //if(col[j].getAttribute("colno")==cole[1]){
         xdisplacement = col[j].getAttribute("x");
         if(e.detail.x==xdisplacement){
           colnum = col[j].getAttribute("colno");
@@ -361,8 +376,6 @@ function highLightColumn(e){
           y=Number(col[j].getAttribute("y"));
           col[j].style.fill = '#BC4445';
 
-          //console.log(x,y);
-          //sconsole.log(col[j].getAttribute("value"));
           eRect[colnum].setAttribute("visibility","visible");
           uppertext[colnum].setAttribute("visibility","visible");
 
@@ -382,40 +395,9 @@ function highLightColumn(e){
             eRect[colnum].setAttribute("y",y-40);  
           }
           
-
-          
-
-          uppertext[colnum].innerHTML = col[j].getAttribute("value");
+           uppertext[colnum].innerHTML = col[j].getAttribute("value");
         }
     }
-    // for(j=0;j<eRect.length;j++){
-    //   if(j==Number(cole[0])){
-
-    //   }
-    // }
-
-
-  // for( var i=0,j=0;i<col.length;i++){
-  //   xdisplacement = col[i].getAttribute("x");
-  //   //coln=col[i].getAttribute("colno");
-  //   height = col[i].getAttribute("y");
-  //    //for(var j=0;j<eRect.length;j++){
-  //       if(e.detail.x==xdisplacement){
-  //         col[i].style.fill = '#BC4445';
-  //         if(typeof uppertext[j]!=="undefined"){
-  //         uppertext[j].setAttribute("y",e.detail.y+18);
-  //         eRect[j].setAttribute("y",e.detail.y);
-
-  //         eRect[j].setAttribute("x",e.detail.x);
-  //         uppertext[j].setAttribute("x",e.detail.x+45);
-
-  //         uppertext[j].innerHTML = col[i].getAttribute("value");
-          
-  //     // }
-  //    }//end of if
-  //    j++;
-  //  }//end of for 
-  // }
 }
 function resetCol(e){
   var col = document.getElementsByClassName("columnRectClass");
@@ -439,7 +421,6 @@ function callEventlistener(event,rectLeft){
        cArr[i].dispatchEvent(rollover);
   }
 }
- 
 function moveCrosshair(e){
         var x = e.detail.x-e.detail.left-8;
         var yT1,xT1,cdata,CtopX1,CtopX2,CtopY2,yT;
@@ -487,42 +468,9 @@ function moveCrosshair(e){
               } 
 
                    uppertext[i].innerHTML=xCoor[i][j][2];
-               }
               }
-              // else{
-              // eRect[i].setAttribute("visibility","hidden");
-              // uppertext[i].setAttribute("visibility","hidden");}
             }
-            
-            /*if(typeof xCoor[i][j]!=="undefined"){
-              if(typeof xCoor[i][j]!=="undefined"  xCoor[i][j][0]-10<x && xCoor[i][j][0]+10>x){
-                yT = xCoor[i][j][1];
-                xT = xCoor[i][j][0];
-
-                //yT1 = Multivariant.xCoor[i][j+1][1];
-                //xT1 = Multivariant.xCoor[i][j+1][0];
-                //.log(yT+","+xT+"  "+yT1+","+xT1);
-                //console.log(interpolate(x,xT,yT,Multivariant.xCoor[i][j+1][0],Multivariant.xCoor[i][j+1][1]));
-                //uppertext[i].setAttribute("visibility","visible");
-                
-                
-                 if((CtopY2-60)<yT){
-                    uppertext[i].setAttribute("y",yT-20);
-                    eRect[i].setAttribute("y",yT-40);
-                 }else{
-                    uppertext[i].setAttribute("y",yT+30);
-                    eRect[i].setAttribute("y",yT+10);
-                 }
-                 
-                 if((CtopX2-80)<(x+10)){
-                    eRect[i].setAttribute("x",xT-100);
-                    uppertext[i].setAttribute("x",xT-55);
-                 }else{
-                    eRect[i].setAttribute("x",xT+10);
-                    uppertext[i].setAttribute("x",xT+55);
-              }  uppertext[i].innerHTML=xCoor[i][j][2];
-            }
-          }*/
+          }
         }
       }
 function hideCrossHair(e){
@@ -663,73 +611,6 @@ function genDown(val){
               } else {
                 temp = (Number(val[0])) * Math.pow(10, (len - 1));
               }
-        }//if(val==temp){temp=temp-5;}
-         return temp;
-    };
-
-   /* 
-
-
-console.log(Multivariant.xaxisticks);
-
-        for(var j=0;j<Multivariant.xaxisticks;j++){
-
-            if(Multivariant.xCoor[i][j][0]-10<x && Multivariant.xCoor[i][j][0]+10>x){
-                yT = Multivariant.xCoor[i][j][1];
-                xT = Multivariant.xCoor[i][j][0];
-
-                //yT1 = Multivariant.xCoor[i][j+1][1];
-                //xT1 = Multivariant.xCoor[i][j+1][0];
-                //.log(yT+","+xT+"  "+yT1+","+xT1);
-                //console.log(interpolate(x,xT,yT,Multivariant.xCoor[i][j+1][0],Multivariant.xCoor[i][j+1][1]));
-                //uppertext[i].setAttribute("visibility","visible");
-                
-                CtopY2=crosshair[i].getAttribute("y2");
-                CtopX2=svgRect.getAttribute("width");
-                 if((CtopY2-60)<yT){
-                    uppertext[i].setAttribute("y",yT-20);
-                    eRect[i].setAttribute("y",yT-40);
-                 }else{
-                    uppertext[i].setAttribute("y",yT+30);
-                    eRect[i].setAttribute("y",yT+10);
-                 }
-                 
-                 if((CtopX2-80)<(x+10)){
-                    eRect[i].setAttribute("x",xT-100);
-                    uppertext[i].setAttribute("x",xT-55);
-                 }else{
-                    eRect[i].setAttribute("x",xT+10);
-                    uppertext[i].setAttribute("x",xT+55);
-                 }   
-                           
-            uppertext[i].innerHTML=Multivariant.xCoor[i][j][3];
-          }
         }
-  for(var i=0;i<eRect.length;i++){
-    for(var j=0;j<xlen;j++){
-      if(typeof xCoor[i][j]!=="undefined"){
-        //console.log(xCoor[i][j]);
-        for(var k=0;k<col.length;k++){
-          xdisplacement = col[k].getAttribute("x");
-          if(e.detail.x==xdisplacement){
-            col[k].style.fill = '#BC4445';
-          }
-          
-        }uppertext[i].setAttribute("y",e.detail.y+18);
-          eRect[i].setAttribute("y",e.detail.y);
-
-          eRect[i].setAttribute("x",e.detail.x);
-          uppertext[i].setAttribute("x",e.detail.x+45);
-
-          uppertext[i].innerHTML = xCoor[i][j][2];
-      }else{
-        console.log(false);
-      }
-    }
-  }
-*/
-
-
-
-
-
+      return temp;
+    };
