@@ -20,8 +20,11 @@ function Multivariant(chartdata) {
     this.marginLeft = 30;
     this.noOfGraphPlotted  = Number(((window.innerWidth/this.svgWidth).toString()).split(".")[0]);
 };
-var xCoor = [];
-var xlen;
+var xCoor = [],scr=0,colselect=true;
+window.onscroll = function (e) {
+   scr=window.scrollY; // Value of scroll Y in px
+};
+
 Multivariant.prototype.rearrange = function(operation){
   var sum=[],newsum=[],index=[],x=[];
   for(datai in this.graphData){
@@ -66,14 +69,15 @@ Multivariant.prototype.rearrange = function(operation){
   return(index);
 }
 Multivariant.prototype.render = function(){
+
+
    var url = "http://www.w3.org/2000/svg",dataArray,maxminArray,newmin,newmax,limits,calculationX,calculationY;
    var divisionX,divisiony,plotRatio,datasetStr="",ycord,xcord,y,barHight;
    this.createCaption(url);
-   var rea = this.rearrange(this.Chartdata.chartinfo.chartsPositioning);
-   console.log(rea);
+   var rearrangeData = this.rearrange(this.Chartdata.chartinfo.chartsPositioning);
    for(datai in this.graphData){
       xCoor[datai]=[];
-      dataArray = (this.graphData[rea[datai]].data).split(this.separator);
+      dataArray = (this.graphData[rearrangeData[datai]].data).split(this.separator);
       var dataArrayLen=dataArray.length;
       maxminArray = this.calculateMaxMin(dataArray);//returning Max And Min Array
       if(maxminArray[0]==maxminArray[1]){
@@ -92,7 +96,8 @@ Multivariant.prototype.render = function(){
       divisiony = (this.chartHeight) / this.yaxisticks;
       plotRatio = this.chartHeight/(newmax-newmin);   
       var svgGraph = this.createSvg(url,this.svgWidth,this.svgHeight,"svgGraph","svgGraphClass",this.divId);
-  
+      var ofsetx=svgGraph.getBoundingClientRect().left,
+          ofsety=svgGraph.getBoundingClientRect().top;
 
          for(i=0;i<=this.yaxisticks;i++){
             calculationY =(Number(divisiony)*i)+this.marginxy;
@@ -122,9 +127,7 @@ Multivariant.prototype.render = function(){
             this.createText(url,svgGraph,(this.marginxy-15),(calculationY+5),titleY,"#145255",11,'end',"yaxisticks");
             this.createLines(url,svgGraph,(this.marginxy-10),(calculationY),(this.marginxy-5),(calculationY),"yaxisticks","yaxisticks");                       
          }
-      this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
       this.createRect(url,svgGraph,this.marginxy-5,this.marginxy-5,this.chartHeight+10,this.chartWidth-this.marginxy+10,"axisRect","axisRectClass");
-      this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
 
       if(this.chartType=="line"){//line chart
         divisionX = (this.chartWidth) / (this.xaxisticks-1);
@@ -153,12 +156,14 @@ Multivariant.prototype.render = function(){
          }        
 
          this.createPoly(url,svgGraph,datasetStr);
-
+        
+             //console.log(ofsetx,ofsety);
          var xy = datasetStr.split(" ");
          var xyCor,xyCorlen = xy.length-1;
          for(i=0;i<xyCorlen;i++){
             xyCor = xy[i].split(',');
-            this.createeCirles(url,svgGraph,xyCor[0],xyCor[1],5);
+            this.createeCirles(url,svgGraph,xyCor[0],xyCor[1],5,(Number(ofsetx)+Number(xyCor[0])),(Number(ofsety)+Number(xyCor[1])));
+            //console.log((Number(ofsetx)+Number(xyCor[0])),(Number(ofsety)+Number(xyCor[1])));
             //url,svg,x1,y1,x2,y2,classname,lineId
          }   
       this.createLines(url,svgGraph,(this.marginxy-5),(this.marginxy-5),(this.marginxy-5),(this.chartHeight+5+this.marginxy),"crosshair","crosshair");    
@@ -166,16 +171,18 @@ Multivariant.prototype.render = function(){
       }else{
       //column chart
       divisionX = (this.chartWidth) / (this.xaxisticks);
-      for(i=0;i<this.xaxisticks+1;i++){
-        this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
-      }
-      if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
-        for(i=0;i<this.xaxisticks;i++){
-          calculationX = divisionX*i+this.marginxy+divisionX/2;
-          this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
-        }        
-      }
-        
+      //here
+
+      //xaxis titles....
+      // if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
+      //   for(i=0;i<this.xaxisticks;i++){
+      //     calculationX = divisionX*i+this.marginxy+divisionX/2;
+      //     this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
+      //   }        
+      // }
+      //this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
+      //this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
+
       for(var i=0;i<dataArrayLen;i++){
         if(typeof dataArray[i]!="undefined" && dataArray[i]!=""){
                 y = Number(dataArray[i]);
@@ -188,15 +195,41 @@ Multivariant.prototype.render = function(){
                 //xCoor[datai][i][1]=[ycord];
                 //xCoor[datai][i][2]=[y];
 
-                if(barHight<1){barHight=2;ycord=ycord-2;} 
-                this.createRect(url,svgGraph,xcord,ycord,barHight+5,divisionX-60,"columnRect","columnRectClass",y,datai,this.chartWidth);
+                if(barHight<1){barHight=1;ycord=ycord-1;} 
+                this.createRect(url,svgGraph,xcord,ycord,barHight+5,divisionX-60,"columnRect","columnRectClass",y,datai,this.chartWidth,ofsetx,ofsety);
             }
          }//successfully displaying Data String
       }
       //common rect,tooltip
       this.createRect(url,svgGraph,-90,-90,30,40,"tootltiprect","tootltiprect");
       this.createText(url,svgGraph,-90,-90,"",'rgb(22,77,96)',12,"middle","uppertext");
- 
+      this.createRect(url,svgGraph,0,0,0,0,"dragDiv","dragDiv");
+     var dragable = document.createElement('div');
+         dragable.className = 'dragableDiv';
+         dragable.id = 'dragableDiv';
+         document.body.appendChild(dragable);
+            if(this.noOfGraphs%2==0){
+       this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
+       this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
+        if(datai>=(this.graphData.length-this.noOfGraphPlotted)){for(i=0;i<this.xaxisticks+1;i++){
+                  this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
+                }
+                for(i=0;i<this.xaxisticks;i++){
+                     calculationX = divisionX*i+this.marginxy+divisionX/2;
+                     this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
+                   }}
+
+      }else{//title up
+        for(i=0;i<this.xaxisticks;i++){
+             calculationX = divisionX*i+this.marginxy+divisionX/2;
+             this.createText(url,svgGraph,(calculationX),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+         }
+        for(i=0;i<this.xaxisticks+1;i++){
+          this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
+        }
+         this.createRect(url,svgGraph,this.marginxy-5,(this.chartHeight+this.marginxy+10),35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
+         this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,(this.chartHeight+this.marginxy+32),this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
+      }
       datasetStr="";
    }//end of the graphs
 }
@@ -228,58 +261,99 @@ Multivariant.prototype.createSvg = function(url,svgW,svgH,svgId,svgClass,svgAppe
        svg.setAttribute("class",svgClass);
    svgAppend.appendChild(svg);
    if(svgId=="svgGraph"){
-    svg.addEventListener("mousedown",function(event){
+      svg.addEventListener("mousedown",function(event){
       event.preventDefault();
-      var startX = event.clientX;
-      var startY = event.clientY;
-      var dragable = document.createElement('div');
-          dragable.className = 'dragableDiv';
-          dragable.style.top = startY+"px";
-          dragable.style.left = startX+"px";
-      document.body.appendChild(dragable);
-      //initDrag(event,svg);
-      dragable.addEventListener('mousemove', function(event){mouseMoveHandler(event,startX,startY,dragable)});
-      dragable.addEventListener('mouseup', function(event){mouseUpHandler(event,dragable)});
+      bool =true;
+      initDrag(event,svg);   
     });
    }
    return svg;
 }
-var mouseMoveHandler = function (e,x,y,dragable) {
-          e.preventDefault();
-          dragable.style.width = (e.pageX-x)+"px";
-          dragable.style.height = (e.pageY-y)+"px";
-}
- 
-var mouseUpHandler = function (event,dragable) {
-        //currentElement = null;
-        dragable.removeEventListener('mousemove', mouseMoveHandler);
-        dragable.removeEventListener('mouseup', mouseUpHandler);
-        dragable = null;
-}
+//++++++++++++++++++++
+var bool =true;
 function initDrag(event,svg){
-  var startX = event.clientX;
-  var startY = event.clientY;
-  var dragable = document.createElement('div');
-  dragable.className = 'dragableDiv';
+  var startX = event.pageX;
+  var startY = event.pageY;
+  var dragable = document.getElementById("dragableDiv");
   dragable.style.top = startY+"px";
   dragable.style.left = startX+"px";
-  document.body.appendChild(dragable);
-  //console.log(startX+" "+startY);
-  svg.addEventListener("mousemove",function(e){
-    dragdiv(e,dragable,startX,startY);
-  });
-  svg.addEventListener("mouseup",function(e){
-    stopDrag(e,svg);
-  });
+  dragable.style.visibility="visible";
+    svg.addEventListener("mousemove",function(e){
+      if(bool){dragdiv(e,dragable,startX,startY,svg);}
+    });
+    dragable.addEventListener("mousemove",function(e){
+      if(bool){dragdiv(e,dragable,startX,startY,svg);}
+    });
+    dragable.addEventListener('mouseup', function(event){
+      bool=false;        
+      dragable.style.visibility="hidden";
+      dragable.style.width="0px";
+      dragable.style.height="0px";
+      dragable.style.top="0px";
+      dragable.style.left="0px";
+    });
+
 }
-function stopDrag(e,svg){
-      
-}
-function dragdiv(e,d,x,y){
-  d.style.width = (e.pageX-x)+"px";
-  d.style.height = (e.pageY-y)+"px";
+
+function dragdiv(e,d,x,y,svg){
+  colselect=false;
+  var dheight = (e.clientY-y+scr);
+  var dwidth = (e.clientX-x);
+  d.style.width = (dwidth)+"px";
+  d.style.height = (dheight)+"px";
+  var x2 = dwidth+x;
+  var y2 = dheight+y;
+  var offsetLeft = svg.getBoundingClientRect().left;
+  var offsettop = svg.getBoundingClientRect().top;
+  //console.log(x,y-scr,x2,y2-scr);
+  x=x;
+  y=y-scr;
+  x2=x2;
+  y2=y2-scr;
+  var col = document.getElementsByClassName("columnRectClass"),cx,cy;
+  var cir = document.getElementsByClassName("graphCircle");
+  for(i=0;i<col.length;i++){
+    cx=col[i].getAttribute("x");cx=Number(cx);//+offsetLeft;
+    cy=col[i].getAttribute("y");cy=Number(cy);
+    var cw=col[i].getAttribute("width");cw=Number(cw);
+    var ch=col[i].getAttribute("height");ch=Number(ch);
+    var ox=col[i].getAttribute("ofsetx");ox=Number(ox);
+    var oy=col[i].getAttribute("ofsety");oy=Number(oy);
+    var cx2,cy2,cx3,cy3,cx4,cy4;
+    //console.log(cw,ch);
+    //console.log(i+" x:"+(x)+" cx:"+cx);
+    cx=cx+ox;
+    cy=Math.abs(cy+oy);
+    cx2 = cx+cw;
+    cy2 = cy;
+    cx3 = cx;
+    cy3 = cy+ch;
+    cx4 = cx2;
+    cy4 = cy3;
+    console.log(i,cx,cy,cx4,cy3+" po "+x2+" "+y2);
+      //col[i].style.fill="#1E7ACD";
+    if(cx<=x2 && cx4>=x2 && cy<=y2 && cy3>=y2){
+      //colselect=false;
+      col[i].style.fill="#BC4445";
+      col[i].style.WebkitTransition = 'fill 1s';
+    }
+  }
+  for(var i=0;i<cir.length;i++){
+    cx=cir[i].getAttribute("absX");cx=cx;//+offsetLeft;
+    cy=cir[i].getAttribute("absY");cy=cy-scr;//+offsettop;
+    //console.log(i+" x:"+x+" cx:"+ cx);
+      cir[i].style.fill="#fff";
+      cir[i].setAttribute("r",5);
+    if(cx>=x && cx<=x2 && cy>=y && cy<=y2){
+      //console.log(i+": cx"+cx+" cy:"+cy);
+      cir[i].style.fill="#BC4445";
+      cir[i].setAttribute("r",7);
+      cir[i].style.WebkitTransition = 'fill 1s';
+    }
+  }
   
 }
+//++++++++++++++++
 Multivariant.prototype.createText = function(url,svg,x,y,textVal,textColor,fontSize,pos,textClass){
         var newText = document.createElementNS(url,"text");
             svg.appendChild(newText);
@@ -304,12 +378,15 @@ Multivariant.prototype.createLines = function(url,svg,x1,y1,x2,y2,classname,line
             }
             svg.appendChild(lineXY);
     };
-Multivariant.prototype.createeCirles = function(url,svg,x,y,r){
+Multivariant.prototype.createeCirles = function(url,svg,x,y,r,absX,absY){
             var shape = document.createElementNS(url, "circle");
             shape.setAttributeNS(null, "cx", x);
             shape.setAttributeNS(null, "cy", y);
             shape.setAttributeNS(null, "r",  r);
+            shape.setAttributeNS(null, "absX",  absX);
+            shape.setAttributeNS(null, "absY",  absY);
             shape.setAttributeNS(null, "id",  'graphCircle');
+            shape.setAttributeNS(null, "class",  'graphCircle');
             shape.setAttributeNS(null, "fill", "#fff");  
             svg.appendChild(shape);
     };
@@ -319,7 +396,7 @@ Multivariant.prototype.createPoly = function(url,svg,dataset){
             shape.setAttributeNS(null, "class",  "svgPoly");
             svg.appendChild(shape); 
     };
-Multivariant.prototype.createRect = function(url,svg,rectX,rectY,rectHeight,rectWidth,rectId,rectClass,value,i,wd){
+Multivariant.prototype.createRect = function(url,svg,rectX,rectY,rectHeight,rectWidth,rectId,rectClass,value,i,wd,ofsetx,ofsety){
        var rectLeft;
        var rect = document.createElementNS(url, "rect");
             rect.setAttributeNS(null, "x", rectX);
@@ -344,6 +421,8 @@ Multivariant.prototype.createRect = function(url,svg,rectX,rectY,rectHeight,rect
 
             }else if(rectId=="columnRect"){
                 //console.log(wd);
+                rect.setAttributeNS(null, "ofsetx",  ofsetx);
+                rect.setAttributeNS(null, "ofsety",  ofsety);
                 rect.addEventListener("mousemove", function(event){
                   highLightRect(event,rectX,rectY,value,i,wd);
                 }, false);
@@ -374,8 +453,11 @@ function highLightColumn(e){
           colnum = col[j].getAttribute("colno");
           x=Number(col[j].getAttribute("x"));
           y=Number(col[j].getAttribute("y"));
-          col[j].style.fill = '#BC4445';
-
+          if(colselect==true){
+            col[j].style.fill = '#BC4445';
+            col[j].style.WebkitTransition = 'fill 0.4s';
+          }
+          
           eRect[colnum].setAttribute("visibility","visible");
           uppertext[colnum].setAttribute("visibility","visible");
 
@@ -474,10 +556,10 @@ function moveCrosshair(e){
         }
       }
 function hideCrossHair(e){
-        var elements = document.getElementsByClassName("crosshair");
-        for(var i = 0; i<elements.length; i++){
-                elements[i].setAttribute("visibility","hidden");
-            }
+    var elements = document.getElementsByClassName("crosshair");
+      for(var i = 0; i<elements.length; i++){
+        elements[i].setAttribute("visibility","hidden");
+      }
     }
 Multivariant.prototype.calPicks = function(ub,lb){
    if((ub-lb)==ub){

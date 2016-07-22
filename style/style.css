@@ -3,7 +3,7 @@
       -webkit-transition: fill 1s, -webkit-transform 1s;
     transition: fill 1s, transform 1s;
 }
-#graphCircle{
+.graphCircle{
   stroke:#1F7ACB;
   stroke-width:2;
   fill:#fff;
@@ -80,5 +80,17 @@
   position: absolute;
   border: 1px solid rgba(102, 0, 153,0.6);
   background:rgba(0,0,0,0.3);
-
+  top:0px;
+  left:0px;
+  width: 0px;
+  height: 0px;
+}
+.dragDiv{
+    position: absolute;
+  border: 1px solid rgba(102, 0, 153,0.6);
+  background:rgba(0,0,0,0.3);
+  top:0px;
+  left:0px;
+  width: 0px;
+  height: 0px;
 }
