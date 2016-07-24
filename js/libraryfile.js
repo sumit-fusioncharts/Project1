@@ -1,4 +1,12 @@
+var scr = 0;
+window.onscroll = function (e) {
+   scr=window.scrollY; // Value of scroll Y in px
+};
+window.onresize = function() {
+    location.reload();
+}
 var xlen ;
+var xCoor = [],colselect=true;
 function Multivariant(chartdata) {
     this.Chartdata = chartdata;
     this.separator = (chartdata.chartinfo.dataseparator === "") ? "|" : chartdata.chartinfo.dataseparator;
@@ -20,10 +28,8 @@ function Multivariant(chartdata) {
     this.marginLeft = 30;
     this.noOfGraphPlotted  = Number(((window.innerWidth/this.svgWidth).toString()).split(".")[0]);
 };
-var xCoor = [],scr=0,colselect=true;
-window.onscroll = function (e) {
-   scr=window.scrollY; // Value of scroll Y in px
-};
+
+
 
 Multivariant.prototype.rearrange = function(operation){
   var sum=[],newsum=[],index=[],x=[];
@@ -131,12 +137,7 @@ Multivariant.prototype.render = function(){
 
       if(this.chartType=="line"){//line chart
         divisionX = (this.chartWidth) / (this.xaxisticks-1);
-        if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
-        for(i=0;i<this.xaxisticks;i++){
-          calculationX = divisionX*i+this.marginxy;
-          this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
-        }
-      } 
+ 
          for(var i=0;i<dataArrayLen;i++){
             
             if(typeof dataArray[i]!="undefined" && dataArray[i]!=""){
@@ -151,9 +152,7 @@ Multivariant.prototype.render = function(){
             }
          }//successfully displaying Data String for plotting
          //console.log(Multivariant.xCoor);
-         for(i=0;i<this.xaxisticks;i++){
-            this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
-         }        
+      
 
          this.createPoly(url,svgGraph,datasetStr);
         
@@ -171,30 +170,13 @@ Multivariant.prototype.render = function(){
       }else{
       //column chart
       divisionX = (this.chartWidth) / (this.xaxisticks);
-      //here
-
-      //xaxis titles....
-      // if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
-      //   for(i=0;i<this.xaxisticks;i++){
-      //     calculationX = divisionX*i+this.marginxy+divisionX/2;
-      //     this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
-      //   }        
-      // }
-      //this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
-      //this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
 
       for(var i=0;i<dataArrayLen;i++){
         if(typeof dataArray[i]!="undefined" && dataArray[i]!=""){
                 y = Number(dataArray[i]);
                 xcord= (divisionX*i)+this.marginxy+5;
                 barHight = ((y-newmin)*plotRatio); 
-                ycord = (this.chartHeight - barHight+this.marginxy);             
-
-                //xCoor[datai][i]=[];
-                //xCoor[datai][i][0]=[xcord];
-                //xCoor[datai][i][1]=[ycord];
-                //xCoor[datai][i][2]=[y];
-
+                ycord = (this.chartHeight - barHight+this.marginxy);            
                 if(barHight<1){barHight=1;ycord=ycord-1;} 
                 this.createRect(url,svgGraph,xcord,ycord,barHight+5,divisionX-60,"columnRect","columnRectClass",y,datai,this.chartWidth,ofsetx,ofsety);
             }
@@ -208,28 +190,36 @@ Multivariant.prototype.render = function(){
          dragable.className = 'dragableDiv';
          dragable.id = 'dragableDiv';
          document.body.appendChild(dragable);
-            if(this.noOfGraphs%2==0){
-       this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
-       this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
-        if(datai>=(this.graphData.length-this.noOfGraphPlotted)){for(i=0;i<this.xaxisticks+1;i++){
-                  this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
-                }
-                for(i=0;i<this.xaxisticks;i++){
-                     calculationX = divisionX*i+this.marginxy+divisionX/2;
-                     this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
-                   }}
 
-      }else{//title up
+//console.log(this.graphData.length,this.noOfGraphPlotted,this.graphData.length-this.noOfGraphPlotted)
+    document.getElementById("svgCaption").setAttribute("width",(this.noOfGraphPlotted*this.svgWidth+this.marginxy));
+    if(this.noOfGraphPlotted*2==this.graphData.length){
+      //equal caption will be on top
+      this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
+      this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
+      if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
         for(i=0;i<this.xaxisticks;i++){
-             calculationX = divisionX*i+this.marginxy+divisionX/2;
-             this.createText(url,svgGraph,(calculationX),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
-         }
-        for(i=0;i<this.xaxisticks+1;i++){
-          this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
+          calculationX = divisionX*i+this.marginxy+divisionX/2;
+          this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
         }
-         this.createRect(url,svgGraph,this.marginxy-5,(this.chartHeight+this.marginxy+10),35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
-         this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,(this.chartHeight+this.marginxy+32),this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
       }
+      for(i=0;i<this.xaxisticks+1;i++){
+         this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
+      }
+    }else{
+      this.createRect(url,svgGraph,this.marginxy-5,(this.chartHeight+this.marginxy+10),35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
+      this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,(this.chartHeight+this.marginxy+32),this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
+      for(i=0;i<this.xaxisticks+1;i++){
+       this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
+      }
+      if(datai<=(this.noOfGraphPlotted-1)){
+        for(i=0;i<this.xaxisticks;i++){
+            calculationX = divisionX*i+this.marginxy+divisionX/2;
+            this.createText(url,svgGraph,(calculationX),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+        }
+      }
+    }
+
       datasetStr="";
    }//end of the graphs
 }
@@ -275,34 +265,58 @@ function initDrag(event,svg){
   var startX = event.pageX;
   var startY = event.pageY;
   var dragable = document.getElementById("dragableDiv");
-  dragable.style.top = startY+"px";
-  dragable.style.left = startX+"px";
+  dragable.style.top = (startY-1)+"px";
+  dragable.style.left = (startX-1)+"px";
   dragable.style.visibility="visible";
     svg.addEventListener("mousemove",function(e){
-      if(bool){dragdiv(e,dragable,startX,startY,svg);}
+     // colselect=false;
+      if(bool){dragdiv(e,dragable,(startX-1),(startY-1),svg);}
     });
     dragable.addEventListener("mousemove",function(e){
+     // colselect=false;
       if(bool){dragdiv(e,dragable,startX,startY,svg);}
     });
     dragable.addEventListener('mouseup', function(event){
-      bool=false;        
+      bool=false;      
       dragable.style.visibility="hidden";
       dragable.style.width="0px";
       dragable.style.height="0px";
       dragable.style.top="0px";
       dragable.style.left="0px";
+    //  colselect=true;
     });
 
 }
 
 function dragdiv(e,d,x,y,svg){
-  colselect=false;
-  var dheight = (e.clientY-y+scr);
-  var dwidth = (e.clientX-x);
-  d.style.width = (dwidth)+"px";
-  d.style.height = (dheight)+"px";
-  var x2 = dwidth+x;
-  var y2 = dheight+y;
+  
+  var dheight = (e.clientY+scr);
+  var dwidth = (e.clientX);
+  var w = dwidth - x;
+  var h = dheight - y;
+
+        if(w < 0 && h < 0){
+          y = dheight;
+          h *= 1;
+          x = dwidth;
+          w *= -1;
+        }
+        if(w >= 0 && h < 0){
+          y = dheight;
+          h *= -1;
+        }
+        if(w < 0 && h >= 0){
+          x = dwidth;
+          w *= -1;
+        }
+   
+  d.style.top = y+"px";
+  d.style.left = x+"px";
+  d.style.width = w+"px";
+  d.style.height = h+"px";
+
+  var x2 = w+x;
+  var y2 = h+y;
   var offsetLeft = svg.getBoundingClientRect().left;
   var offsettop = svg.getBoundingClientRect().top;
   //console.log(x,y-scr,x2,y2-scr);
@@ -330,12 +344,13 @@ function dragdiv(e,d,x,y,svg){
     cy3 = cy+ch;
     cx4 = cx2;
     cy4 = cy3;
-    console.log(i,cx,cy,cx4,cy3+" po "+x2+" "+y2);
-      //col[i].style.fill="#1E7ACD";
-    if(cx<=x2 && cx4>=x2 && cy<=y2 && cy3>=y2){
-      //colselect=false;
+
+    // if(((cx<=x2 && cx4>=x2)||((cx<=x && cx4>=x))) && (cy<=y2 && cy3>=y2)){
+    if(((cx<=x2 && cx>=x)||((cx4<=x2 && cx4>=x))) && (cy<=y2 && cy3>=y2)){
       col[i].style.fill="red";
-      col[i].style.WebkitTransition = 'fill 1s';
+      col[i].style.WebkitTransition = 'fill 1s';    
+    }else{
+      col[i].style.fill = '#1E7ACD';
     }
   }
   for(var i=0;i<cir.length;i++){
@@ -345,8 +360,8 @@ function dragdiv(e,d,x,y,svg){
       cir[i].style.fill="#fff";
       cir[i].setAttribute("r",5);
     if(cx>=x && cx<=x2 && cy>=y && cy<=y2){
-      //console.log(i+": cx"+cx+" cy:"+cy);
-      cir[i].style.fill="red";
+    //console.log(i+": cx"+cx+" cy:"+cy);
+      cir[i].style.fill="#FA8072";
       cir[i].setAttribute("r",7);
       cir[i].style.WebkitTransition = 'fill 1s';
     }
@@ -454,10 +469,10 @@ function highLightColumn(e){
           colnum = col[j].getAttribute("colno");
           x=Number(col[j].getAttribute("x"));
           y=Number(col[j].getAttribute("y"));
-          if(colselect==true){
+          //if(colselect==true){
             col[j].style.fill = '#BC4445';
             col[j].style.WebkitTransition = 'fill 0.4s';
-          }
+          //}
           
           eRect[colnum].setAttribute("visibility","visible");
           uppertext[colnum].setAttribute("visibility","visible");
@@ -484,6 +499,7 @@ function highLightColumn(e){
 }
 function resetCol(e){
   var col = document.getElementsByClassName("columnRectClass");
+  //colselect=true;
   for( var i=0;i<col.length;i++){
     col[i].style.fill = "#1E7ACD";
   }
@@ -512,6 +528,7 @@ function moveCrosshair(e){
         var uppertext = document.getElementsByClassName("uppertext");
         var crosshair = document.getElementsByClassName("crosshair");
         var svgRect = document.getElementsByClassName("svgCrosshairRect"),i,j;
+        var cir = document.getElementsByClassName("graphCircle");
         //Y = ( ( X - X1 )( Y2 - Y1) / ( X2 - X1) ) + Y1
         //console.log(eRect.length);
         for(i = 0; i<elements.length; i++){
@@ -529,9 +546,12 @@ function moveCrosshair(e){
             if(typeof xCoor[i][j]!=="undefined"){
               yT = Number(xCoor[i][j][1]);
               xT = Number(xCoor[i][j][0]);
-              
+              cir[j].style.stroke="#1F7ACB";
+              cir[j].setAttribute("r",5);
                if(xCoor[i][j][0]<=(x+59) && xCoor[i][j][0]>=(x+49)){
-                
+                  cir[j].style.stroke="#FA8072";
+                  cir[j].setAttribute("r",6);
+                  cir[j].style.WebkitTransition = 'stroke 0.7s';
                 uppertext[i].setAttribute("visibility","visible");
                 eRect[i].setAttribute("visibility","visible");
                    
