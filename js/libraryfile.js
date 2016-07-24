@@ -1,4 +1,4 @@
-
+var xlen ;
 function Multivariant(chartdata) {
     this.Chartdata = chartdata;
     this.separator = (chartdata.chartinfo.dataseparator === "") ? "|" : chartdata.chartinfo.dataseparator;
@@ -334,7 +334,7 @@ function dragdiv(e,d,x,y,svg){
       //col[i].style.fill="#1E7ACD";
     if(cx<=x2 && cx4>=x2 && cy<=y2 && cy3>=y2){
       //colselect=false;
-      col[i].style.fill="#BC4445";
+      col[i].style.fill="red";
       col[i].style.WebkitTransition = 'fill 1s';
     }
   }
@@ -346,7 +346,7 @@ function dragdiv(e,d,x,y,svg){
       cir[i].setAttribute("r",5);
     if(cx>=x && cx<=x2 && cy>=y && cy<=y2){
       //console.log(i+": cx"+cx+" cy:"+cy);
-      cir[i].style.fill="#BC4445";
+      cir[i].style.fill="red";
       cir[i].setAttribute("r",7);
       cir[i].style.WebkitTransition = 'fill 1s';
     }
@@ -449,6 +449,7 @@ function highLightColumn(e){
 
     for(var j=0;j<col.length;j++){
         xdisplacement = col[j].getAttribute("x");
+
         if(e.detail.x==xdisplacement){
           colnum = col[j].getAttribute("colno");
           x=Number(col[j].getAttribute("x"));
@@ -463,8 +464,8 @@ function highLightColumn(e){
 
           
           if(e.detail.w<(x+100)){
-            eRect[colnum].setAttribute("x",x-80);
-            uppertext[colnum].setAttribute("x",x+45-80);
+            eRect[colnum].setAttribute("x",x-85);
+            uppertext[colnum].setAttribute("x",x+45-85);
           }else{
             eRect[colnum].setAttribute("x",x);
             uppertext[colnum].setAttribute("x",x+45);
@@ -518,16 +519,18 @@ function moveCrosshair(e){
             elements[i].setAttribute("x1",x+53);
             elements[i].setAttribute("x2",x+53);
             
+            eRect[i].setAttribute("visibility","hidden");
+            uppertext[i].setAttribute("visibility","hidden");
 
             CtopY2=crosshair[i].getAttribute("y2");
             CtopX2=svgRect[i].getAttribute("width");
 
-          for(j=0;j<7;j++){
+          for(j=0;j<xlen;j++){
             if(typeof xCoor[i][j]!=="undefined"){
               yT = Number(xCoor[i][j][1]);
               xT = Number(xCoor[i][j][0]);
               
-               if(xCoor[i][j][0]<=(x+58) && xCoor[i][j][0]>=(x+50)){
+               if(xCoor[i][j][0]<=(x+59) && xCoor[i][j][0]>=(x+49)){
                 
                 uppertext[i].setAttribute("visibility","visible");
                 eRect[i].setAttribute("visibility","visible");
@@ -541,7 +544,7 @@ function moveCrosshair(e){
                     eRect[i].setAttribute("y",yT+10);
                  }
                  
-                 if((CtopX2-80)<(x+10)){
+                 if((CtopX2-100)<(x+10)){
                     eRect[i].setAttribute("x",xT-100);
                     uppertext[i].setAttribute("x",xT-55);
                  }else{
@@ -557,8 +560,12 @@ function moveCrosshair(e){
       }
 function hideCrossHair(e){
     var elements = document.getElementsByClassName("crosshair");
+    var eRect = document.getElementsByClassName("tootltiprect");
+    var uppertext = document.getElementsByClassName("uppertext");
       for(var i = 0; i<elements.length; i++){
         elements[i].setAttribute("visibility","hidden");
+        eRect[i].setAttribute("visibility","hidden");
+        uppertext[i].setAttribute("visibility","hidden");
       }
     }
 Multivariant.prototype.calPicks = function(ub,lb){
