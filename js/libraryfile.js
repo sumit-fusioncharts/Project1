@@ -186,7 +186,7 @@ Multivariant.prototype.render = function(){
       this.createRect(url,svgGraph,-90,-90,30,40,"tootltiprect","tootltiprect");
       this.createText(url,svgGraph,-90,-90,"",'rgb(22,77,96)',12,"middle","uppertext");
       this.createRect(url,svgGraph,0,0,0,0,"dragDiv","dragDiv");
-     var dragable = document.createElement('div');
+      var dragable = document.createElement('div');
          dragable.className = 'dragableDiv';
          dragable.id = 'dragableDiv';
          document.body.appendChild(dragable);
@@ -219,7 +219,6 @@ Multivariant.prototype.render = function(){
         }
       }
     }
-
       datasetStr="";
    }//end of the graphs
 }
@@ -528,7 +527,7 @@ function moveCrosshair(e){
         var uppertext = document.getElementsByClassName("uppertext");
         var crosshair = document.getElementsByClassName("crosshair");
         var svgRect = document.getElementsByClassName("svgCrosshairRect"),i,j;
-        var cir = document.getElementsByClassName("graphCircle");
+        //var cir = document.getElementsByClassName("graphCircle");
         //Y = ( ( X - X1 )( Y2 - Y1) / ( X2 - X1) ) + Y1
         //console.log(eRect.length);
         for(i = 0; i<elements.length; i++){
@@ -546,12 +545,12 @@ function moveCrosshair(e){
             if(typeof xCoor[i][j]!=="undefined"){
               yT = Number(xCoor[i][j][1]);
               xT = Number(xCoor[i][j][0]);
-              cir[j].style.stroke="#1F7ACB";
-              cir[j].setAttribute("r",5);
+              // cir[j].style.stroke="#1F7ACB";
+              // cir[j].setAttribute("r",5);
                if(xCoor[i][j][0]<=(x+59) && xCoor[i][j][0]>=(x+49)){
-                  cir[j].style.stroke="#FA8072";
-                  cir[j].setAttribute("r",6);
-                  cir[j].style.WebkitTransition = 'stroke 0.7s';
+                  // cir[j].style.stroke="#FA8072";
+                  // cir[j].setAttribute("r",6);
+                  // cir[j].style.WebkitTransition = 'stroke 0.7s';
                 uppertext[i].setAttribute("visibility","visible");
                 eRect[i].setAttribute("visibility","visible");
                    
