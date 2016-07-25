@@ -288,24 +288,21 @@ function initDrag(event,svg){
 }
 
 function dragdiv(e,d,x,y,svg){
-  
-  var dheight = (e.clientY+scr);
-  var dwidth = (e.clientX);
-  var w = dwidth - x;
-  var h = dheight - y;
+  var w = e.clientX - x;
+  var h = (e.clientY+scr) - y;
 
         if(w < 0 && h < 0){
-          y = dheight;
+          y = (e.clientY+scr);
           h *= 1;
-          x = dwidth;
+          x = e.clientX;
           w *= -1;
         }
         if(w >= 0 && h < 0){
-          y = dheight;
+          y = (e.clientY+scr);
           h *= -1;
         }
         if(w < 0 && h >= 0){
-          x = dwidth;
+          x = e.clientX;
           w *= -1;
         }
    
@@ -332,6 +329,7 @@ function dragdiv(e,d,x,y,svg){
     var ch=col[i].getAttribute("height");ch=Number(ch);
     var ox=col[i].getAttribute("ofsetx");ox=Number(ox);
     var oy=col[i].getAttribute("ofsety");oy=Number(oy);
+    var cn=col[i].getAttribute("colno");cn=Number(cn);
     var cx2,cy2,cx3,cy3,cx4,cy4;
     //console.log(cw,ch);
     //console.log(i+" x:"+(x)+" cx:"+cx);
@@ -346,26 +344,26 @@ function dragdiv(e,d,x,y,svg){
 
     // if(((cx<=x2 && cx4>=x2)||((cx<=x && cx4>=x))) && (cy<=y2 && cy3>=y2)){
     if(((cx<=x2 && cx>=x)||((cx4<=x2 && cx4>=x))) && (cy<=y2 && cy3>=y2)){
-      col[i].style.fill="red";
+      col[i].style.fill="#FA8072";
       col[i].style.WebkitTransition = 'fill 1s';    
     }else{
       col[i].style.fill = '#1E7ACD';
     }
   }
   for(var i=0;i<cir.length;i++){
-    cx=cir[i].getAttribute("absX");cx=cx;//+offsetLeft;
-    cy=cir[i].getAttribute("absY");cy=cy-scr;//+offsettop;
+      cx=cir[i].getAttribute("cx"); cx=Number(cx)+offsetLeft;
+      cy=cir[i].getAttribute("cy");cy=cy-scr+offsettop;
     //console.log(i+" x:"+x+" cx:"+ cx);
       cir[i].style.fill="#fff";
       cir[i].setAttribute("r",5);
+    //  console.log(i,x,x2,cx+" -- "+y,y2,cy);
     if(cx>=x && cx<=x2 && cy>=y && cy<=y2){
     //console.log(i+": cx"+cx+" cy:"+cy);
       cir[i].style.fill="#FA8072";
       cir[i].setAttribute("r",7);
       cir[i].style.WebkitTransition = 'fill 1s';
     }
-  }
-  
+  }  
 }
 //++++++++++++++++
 Multivariant.prototype.createText = function(url,svg,x,y,textVal,textColor,fontSize,pos,textClass){
