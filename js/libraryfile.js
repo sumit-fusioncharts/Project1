@@ -333,8 +333,8 @@ function dragdiv(e,d,x,y,svg){
     var cx2,cy2,cx3,cy3,cx4,cy4;
     //console.log(cw,ch);
     //console.log(i+" x:"+(x)+" cx:"+cx);
-    cx=cx+ox;
-    cy=Math.abs(cy+oy);
+    cx=cx+offsetLeft;//ox;
+    cy=Math.abs(cy+offsettop);//oy);
     cx2 = cx+cw;
     cy2 = cy;
     cx3 = cx;
