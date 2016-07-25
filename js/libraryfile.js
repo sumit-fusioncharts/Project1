@@ -193,32 +193,57 @@ Multivariant.prototype.render = function(){
 
 //console.log(this.graphData.length,this.noOfGraphPlotted,this.graphData.length-this.noOfGraphPlotted)
     document.getElementById("svgCaption").setAttribute("width",(this.noOfGraphPlotted*this.svgWidth+this.marginxy));
-    if(this.noOfGraphPlotted*2==this.graphData.length){
+    
+    //if(this.noOfGraphPlotted*2==this.graphData.length){
+    if(this.graphData.length-this.noOfGraphPlotted==0){
       //equal caption will be on top
+      calculationX = divisionX*i+this.marginxy+divisionX/2;
       this.createRect(url,svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
       this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,25,this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
-      if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
-        for(i=0;i<this.xaxisticks;i++){
-          calculationX = divisionX*i+this.marginxy+divisionX/2;
-          this.createText(url,svgGraph,(calculationX),(this.chartHeight+this.marginxy+30),this.xaxisticksNames[i],"#000",11,"middle","xaxisticksNames");
+      if(this.chartType!="line"){
+        if(datai>=(this.graphData.length-this.noOfGraphPlotted)){
+          for(i=0;i<this.xaxisticks;i++){       
+            this.createText(url,svgGraph,(divisionX*i+this.marginxy+divisionX/2),(this.chartHeight+this.marginxy+15),this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+          }
         }
-      }
-      for(i=0;i<this.xaxisticks+1;i++){
-         this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
+        for(i=0;i<this.xaxisticks+1;i++){
+          this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
+        }
+      }else{
+        for(i=0;i<this.xaxisticks+1;i++){
+          this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+5),(divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+10),"xaxisticks","xaxisticksClass");
+        }
+        if(datai<=(this.noOfGraphPlotted-1)){
+          for(i=0;i<this.xaxisticks+1;i++){
+            this.createText(url,svgGraph,(divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+15),this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+          }
+        }
       }
     }else{
       this.createRect(url,svgGraph,this.marginxy-5,(this.chartHeight+this.marginxy+10),35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
       this.createText(url,svgGraph,(this.chartWidth)/2+this.marginxy,(this.chartHeight+this.marginxy+32),this.Chartdata.dataset[datai].title,"#000",16,"middle","mainCaptionText");
-      for(i=0;i<this.xaxisticks+1;i++){
-       this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
-      }
-      if(datai<=(this.noOfGraphPlotted-1)){
-        for(i=0;i<this.xaxisticks;i++){
-            calculationX = divisionX*i+this.marginxy+divisionX/2;
-            this.createText(url,svgGraph,(calculationX),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+      if(this.chartType=="line"){
+        for(i=0;i<this.xaxisticks+1;i++){
+            this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
         }
+        if(datai<=(this.noOfGraphPlotted-1)){
+          for(i=0;i<this.xaxisticks+1;i++){
+            this.createText(url,svgGraph,(divisionX*i+this.marginxy),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+          }
+        }
+      }else{
+        if(datai<=(this.noOfGraphPlotted-1)){
+          for(i=0;i<this.xaxisticks;i++){       
+            this.createText(url,svgGraph,(divisionX*i+this.marginxy+divisionX/2),2,this.xaxisticksNames[i],"#000",11,"start","xaxisticksNames");
+          }
+        }
+        for(i=0;i<this.xaxisticks+1;i++){
+          this.createLines(url,svgGraph,(divisionX*i+this.marginxy),(this.marginxy-5),(divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
+        }
+
       }
     }
+
       datasetStr="";
    }//end of the graphs
 }
