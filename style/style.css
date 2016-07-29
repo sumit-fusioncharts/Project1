@@ -33,11 +33,13 @@
 .xaxisticks{
   stroke-width:0.2;
   stroke: #000;
+  stroke-width:0.3;
 }
 .yaxisticks{
-  fill: #000;
-  stroke-width:0; 
-}.tootltiprect{
+  
+  stroke:#000; 
+}
+.tootltiprect{
   stroke:#6A463A;
   stroke-width:0.6;
   fill:#FFD9CC;
