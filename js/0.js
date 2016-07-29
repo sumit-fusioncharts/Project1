@@ -1,5 +1,6 @@
 function CreateCaption(caption,subCaption,divId){
-	this.cation = caption;
+
+	this.caption = caption;
 	this.subCaption = subCaption;
 	this.divId = divId;
 }
