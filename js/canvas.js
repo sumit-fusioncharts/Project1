@@ -73,7 +73,6 @@ Canvas.prototype.createRect = function(svg,rectX,rectY,rectHeight,rectWidth,rect
             rect.setAttributeNS(null, "id",  rectId);
             rect.setAttributeNS(null, "class",  rectClass);
             if(typeof value!=="undefined"){
-              //console.log(value);
               rect.setAttributeNS(null, "value",  value);
               rect.setAttributeNS(null, "colno",  i);
             }
@@ -87,7 +86,6 @@ Canvas.prototype.createRect = function(svg,rectX,rectY,rectHeight,rectWidth,rect
                 rect.addEventListener("mouseout", hideCrossHair, false);
 
             }else if(rectId=="columnRect"){
-                //console.log(wd);
                 rect.setAttributeNS(null, "ofsetx",  ofsetx);
                 rect.setAttributeNS(null, "ofsety",  ofsety);
                 rect.addEventListener("mousemove", function(event){

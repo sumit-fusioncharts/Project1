@@ -17,8 +17,7 @@ ChartBody.prototype.plotData = function(){
 	this.datasetStr="",this.dataValues = "";
 	var dataArrayLen = this.dataArray.length,y,xcord,ycord,barHight;
 	this.plotRatio = this.chartHeight/(this.newmax-this.newmin);
-	//console.log(" xx "+this.max,this.min,this.plotRatio,this.dataArray);
-	//this.createRect(url,svgGraph,this.marginxy-5,this.marginxy-5,this.chartHeight+10,this.chartWidth-this.marginxy+10,"axisRect","axisRectClass");
+
 	for(var i=0;i<dataArrayLen;i++){            
 	    if(typeof this.dataArray[i]!="undefined" && this.dataArray[i]!=""){
 	        y = Number(this.dataArray[i]);
@@ -42,16 +41,16 @@ ChartBody.prototype.plotData = function(){
 
 };
 ChartBody.prototype.draw = function(svgGraph){
-	var _dataObj = this.plotData(),_cc,_lc;
+	var _dataObj = this.plotData(),cc,lc;
 	var ofsetx=svgGraph.getBoundingClientRect().left,
         ofsety=svgGraph.getBoundingClientRect().top;
 
 	
 	if(this.chartType=="column"){
-		_cc = new ColumnChart(svgGraph,this.datasetStr,ofsetx,ofsety,this.divisionX,this.chartWidth);
-		_cc.draw();
+		cc = new ColumnChart(svgGraph,this.datasetStr,ofsetx,ofsety,this.divisionX,this.chartWidth);
+		cc.draw();
 	}else{
-		_lc = new LineChart(svgGraph,this.datasetStr,this.dataValues,ofsetx,ofsety);
-		_lc.draw();
+		lc = new LineChart(svgGraph,this.datasetStr,this.dataValues,ofsetx,ofsety);
+		lc.draw();
 	}
 };
