@@ -2,47 +2,47 @@
 //parsing data
 function DataParsing(dataObj){
 	this.dataObj = dataObj;
-}
-DataParsing.prototype.xAxisNames = function(separator){
+
+this.xAxisNames = function(separator){
 	return (this.dataObj.timestamp.time).split(separator);
 };
-DataParsing.prototype.separator = function(){
+this.separator = function(){
 	return (this.dataObj.chartinfo.dataseparator === "") ? "|" : this.dataObj.chartinfo.dataseparator;
 };
-DataParsing.prototype.getData = function(chartNo,separator){
+this.getData = function(chartNo,separator){
 	return (this.dataObj.dataset[chartNo].data).split(separator);
 };
-DataParsing.prototype.dataSet = function(){
+this.dataSet = function(){
 	return this.dataObj.dataset;
 };
-DataParsing.prototype.chartDiv = function(){
+this.chartDiv = function(){
 	return document.getElementById(this.dataObj.chartinfo.divId);
 };
-DataParsing.prototype.numOfGraphsInaRow = function(svgWidth){
+this.numOfGraphsInaRow = function(svgWidth){
 	return Number(((window.innerWidth/svgWidth).toString()).split(".")[0]);
 };
-DataParsing.prototype.chartArrengement = function(){
+this.chartArrengement = function(){
 	return this.dataObj.chartinfo.chartsPositioning;
 };
-DataParsing.prototype.svgWidth = function(){
+this.svgWidth = function(){
 	return (this.dataObj.chartinfo.width === '') ? "400" : this.dataObj.chartinfo.width;
 };
-DataParsing.prototype.svgheight = function(){
+this.svgheight = function(){
 	return (this.dataObj.chartinfo.height === '') ? "400" : this.dataObj.chartinfo.height;
 };
-DataParsing.prototype.numOfGraphs = function(){
+this.numOfGraphs = function(){
 	return this.dataObj.dataset.length;
 };
-DataParsing.prototype.chartType = function(){
+this.chartType = function(){
 	return this.dataObj.chartinfo.chartType;
 };
-DataParsing.prototype.caption = function(){
+this.caption = function(){
   return this.dataObj.chartinfo.caption;
 };
-DataParsing.prototype.subCaption = function(){
+this.subCaption = function(){
   return this.dataObj.chartinfo.subCaption;
 };
-DataParsing.prototype.maxmin = function(data) {
+this.maxmin = function(data) {
     var max,min,j,temp;
       min = Number(data[0]);
       max=min;
@@ -55,7 +55,7 @@ DataParsing.prototype.maxmin = function(data) {
       }
       return [max,min]; 
 };
-DataParsing.prototype.customize = function(){
+this.customize = function(){
   var dataContainer = {};
   var temp,max,min,avg,title,dataArray,separator = this.separator();
   this.dataset = this.dataObj.dataset;
@@ -75,12 +75,13 @@ DataParsing.prototype.customize = function(){
   }
   return dataContainer;
 };
-DataParsing.prototype.max2min = function(a,b){
+this.max2min = function(a,b){
   return b-a;
 };
-DataParsing.prototype.min2max = function(a,b){
+this.min2max = function(a,b){
   return a-b;
 };
-DataParsing.prototype.sum = function(a,b){
+this.sum = function(a,b){
   return a+b;
+};
 };
