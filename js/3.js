@@ -27,8 +27,8 @@ Xaxis.prototype.draw = function(svgGraph){
             paintX.createText(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+this.marginxy+15),this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
           }
         }
-        for(i=0;i<this.xaxisticks+1;i++){
-          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy),(this.divisionX*i+this.marginxy),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
+        for(i=0;i<this.xaxisticks;i++){
+          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+5+this.marginxy),(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
         }
       }else{
         for(i=0;i<this.xaxisticks+1;i++){
@@ -58,8 +58,8 @@ Xaxis.prototype.draw = function(svgGraph){
             paintX.createText(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),2,this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
           }
         }
-        for(var i=0;i<this.xaxisticks+1;i++){
-          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy),(this.marginxy-5),(this.divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
+        for(var i=0;i<this.xaxisticks;i++){
+          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.marginxy-5),(this.divisionX*i+this.marginxy+this.divisionX/2),(this.marginxy-10),"xaxisticks","xaxisticksClass");
         }
       }
     }
