@@ -101,13 +101,13 @@ function initDrag(event,svg){
 
 function dragdiv(e,d,x,y,svg){
 
-  var w = e.clientX - x;
+  var w = e.pageX - x;
   var h = (e.clientY+scrY) - y;
 
         if(w < 0 && h < 0){
           y = (e.clientY+scrY);
           h *= 1;
-          x = e.clientX;
+          x = e.pageX;
           w *= -1;
         }
         if(w >= 0 && h < 0){
@@ -115,7 +115,7 @@ function dragdiv(e,d,x,y,svg){
           h *= -1;
         }
         if(w < 0 && h >= 0){
-          x = e.clientX;
+          x = e.pageX;
           w *= -1;
         }
    
@@ -179,7 +179,7 @@ function dragdiv(e,d,x,y,svg){
 function callEventlistener(event,rectLeft){
   var cArr = document.getElementsByClassName("svgCrosshairRect");
   var rollover = new CustomEvent("mouserollover",{
-      "detail":{x:event.clientX,y:event.clientY, left:rectLeft}
+      "detail":{x:event.pageX,y:event.clientY, left:rectLeft}
     });
     for( var i=0;i<cArr.length;i++){
       if(cArr[i]!=event.target)
@@ -201,8 +201,9 @@ function moveCrosshair(e){
             elements[i].setAttribute("visibility","visible");
             elements[i].setAttribute("x1",x+53);
             elements[i].setAttribute("x2",x+53);
+           
             uppertext[i].setAttribute("visibility","hidden");
-          eRect[i].setAttribute("visibility","hidden");
+            eRect[i].setAttribute("visibility","hidden");
             
         }
 
