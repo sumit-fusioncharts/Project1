@@ -97,7 +97,6 @@ function initDrag(event,svg){
       dragable.style.left="0px";
     //  colselect=true;
     });
-
 }
 
 function dragdiv(e,d,x,y,svg){
@@ -167,8 +166,7 @@ function dragdiv(e,d,x,y,svg){
     
       cir[i].style.fill="#fff";
       cir[i].setAttribute("r",5);
-    
-     console.log(typeof cy, typeof scrY, typeof offsettop);
+  
     if((cx+8)>=(x-scrX) && (cx-8)<=(x2-scrX) && (cy+8)>=(y-scrY) && (cy-8)<=(y2-scrY)){
     
       cir[i].style.fill="#FA8072";
