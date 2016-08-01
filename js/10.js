@@ -33,10 +33,9 @@ function Multivariant(chartdata){
                for(var j in data){
                  if(temp[i]==data[j].max){
                     ordereddArr.push(data[j].index);
-                 }
-               }
+                    }
+                }
             }
-
         }
         var mintomax = function(){
             for(var i in data){
@@ -52,6 +51,32 @@ function Multivariant(chartdata){
             }
 
         }
+        var avgmaxtomin = function(){
+            for(var i in data){
+                temp.push(data[i].avg);
+            }
+            temp = temp.sort(max2min);
+            for(var i in temp){
+               for(var j in data){
+                 if(temp[i]==data[j].avg){
+                    ordereddArr.push(data[j].index);
+                    }
+                }
+            }
+        }
+        var avgmintomax = function(){
+            for(var i in data){
+                temp.push(data[i].avg);
+            }
+            temp = temp.sort(min2max);
+            for(var i in temp){
+               for(var j in data){
+                 if(temp[i]==data[j].avg){
+                    ordereddArr.push(data[j].index);
+                    }
+                }
+            }
+        }
         var defaultorder = function(){
             for(var i in data){
                 ordereddArr.push(data[i].index);
@@ -59,7 +84,10 @@ function Multivariant(chartdata){
         }
         switch(this.chartArrengement){
             case "maxtomin": maxtomin();break;
-            case "mintomax": mintomax();break; 
+            case "mintomax": mintomax();break;
+            case "avgmaxtomin": avgmaxtomin();break; 
+            case "avgmintomax": avgmintomax();break; 
+            default : defaultorder();break;  
         }
         console.log(ordereddArr);
         return ordereddArr;
