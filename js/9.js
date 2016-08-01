@@ -1,5 +1,5 @@
 //beautifying data
-function Axis(customDataObj,divId,chartType,numOfGraphs,numOfGraphsInaRow){
+function Axis(customDataObj,divId,chartType,numOfGraphs,numOfGraphsInaRow,order){
 	this.customDataObj = customDataObj;
 	this.divId = divId;
 	this.chartType = chartType;
@@ -12,21 +12,23 @@ function Axis(customDataObj,divId,chartType,numOfGraphs,numOfGraphsInaRow){
 	this.marginxy = this.customDataObj.chartDetails[2];
 	this.caption = this.customDataObj.chartDetails[3];
 	this.subCaption = this.customDataObj.chartDetails[4];
-};
+	this.order = order;
 
-Axis.prototype.draw = function(){
+this.draw = function(){
 	var newSvg = new Canvas(),svgVariable,y,x,body;
 	console.log(this.caption,this.subCaption);
 	var captions = new CreateCaption(this.caption,this.subCaption,this.divId);
 	captions.draw();
-	for(var i = 0;i<this.numOfGraphs;i++){
+	var i;
+	for(var j = 0;j<this.numOfGraphs;j++){
+		i = this.order[j];
 		svgVariable = newSvg.createSvg(this.svgWidth,this.svgHeight,"svgGraph","svgGraphClass",this.divId);
 		y = new Yaxis(this.customDataObj.chartDetails,this.customDataObj.y[i]);
 		y.draw(svgVariable);
-		x = new Xaxis(this.customDataObj.chartDetails,this.customDataObj.x,this.numOfGraphs,this.numOfGraphsInaRow,this.customDataObj.y[i].title,i);
+		x = new Xaxis(this.customDataObj.chartDetails,this.customDataObj.x,this.numOfGraphs,this.numOfGraphsInaRow,this.customDataObj.y[i].title,j);
 		x.draw(svgVariable);
 		newSvg.createRect(svgVariable,(this.marginxy-5),(this.marginxy-5),(this.customDataObj.chartDetails[0]+10),(this.customDataObj.chartDetails[1]-this.marginxy+10),"axisRect","axisRectClass");
-		body = new ChartBody(this.chartType,this.customDataObj.y[i],this.customDataObj.chartDetails,(this.customDataObj.x).length,i);
+		body = new ChartBody(this.chartType,this.customDataObj.y[i],this.customDataObj.chartDetails,(this.customDataObj.x).length,j);
 		body.draw(svgVariable);
 
 		if(this.chartType=="line"){
@@ -37,9 +39,11 @@ Axis.prototype.draw = function(){
 
 	  newSvg.createRect(svgVariable,-90,-90,30,40,"tootltiprect","tootltiprect");
       newSvg.createText(svgVariable,-90,-90,"",'rgb(22,77,96)',12,"middle","uppertext");
-      var dragable = document.createElement('div');
+      
+	}
+	var dragable = document.createElement('div');
          dragable.className = 'dragableDiv';
          dragable.id = 'dragableDiv';
          document.body.appendChild(dragable);
-	}
+	};
 };

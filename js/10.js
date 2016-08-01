@@ -14,18 +14,72 @@ function Multivariant(chartdata){
 		this.chartType = chartInfo.chartType();
         this.caption = chartInfo.caption();
         this.subCaption = chartInfo.subCaption();
-    this.dataSet = chartInfo.dataSet();
-    this.customData = chartInfo.customize();
+        this.dataSet = chartInfo.dataSet();
+        this.customData = chartInfo.customize();
 
 	this.chartHeight = this.svgHeight-100;
 	this.chartWidth = this.svgWidth-60;
 	this.margin = 50;
+
+    this.divOrder = function(){
+        var ordereddArr = [],temp = [], data = chartInfo.customize();
+
+        var maxtomin = function(){
+            for(var i in data){
+                temp.push(data[i].max);
+            }
+            temp = temp.sort(max2min);
+            for(var i in temp){
+               for(var j in data){
+                 if(temp[i]==data[j].max){
+                    ordereddArr.push(data[j].index);
+                 }
+               }
+            }
+
+        }
+        var mintomax = function(){
+            for(var i in data){
+                temp.push(data[i].min);
+            }
+            temp = temp.sort(min2max);
+            for(var i in temp){
+               for(var j in data){
+                 if(temp[i]==data[j].min){
+                    ordereddArr.push(data[j].index);
+                 }
+               }
+            }
+
+        }
+        var defaultorder = function(){
+            for(var i in data){
+                ordereddArr.push(data[i].index);
+            }
+        }
+        switch(this.chartArrengement){
+            case "maxtomin": maxtomin();break;
+            case "mintomax": mintomax();break; 
+        }
+        console.log(ordereddArr);
+        return ordereddArr;
+    }
+    var max2min = function(a,b){
+      return b-a;
+    };
+    var min2max = function(a,b){
+      return a-b;
+    };
+    var sum = function(a,b){
+      return a+b;
+    };
 };
 
 Multivariant.prototype.render = function() {
-
-	var temp,axisObj={};
+    var order = this.divOrder();
+	var temp,i,axisObj={};
 	for(var i in this.customData){
+
 		temp = this.beautify(this.customData[i].max,this.customData[i].min);
 		if(temp[0]==temp[1]){
            temp[1] = temp[0]-10; temp[0] = temp[0]+10;
@@ -41,7 +95,7 @@ Multivariant.prototype.render = function() {
 	axisObj.x = this.xAxisNames;
 	axisObj.chartDetails = [this.chartHeight,this.chartWidth,this.margin,this.caption,this.subCaption];
 
-	var axisInstance = new Axis(axisObj,this.chartDiv,this.chartType,this.numOfGraphs,this.numOfGraphsInaRow);
+	var axisInstance = new Axis(axisObj,this.chartDiv,this.chartType,this.numOfGraphs,this.numOfGraphsInaRow,order);
 		axisInstance.draw();
 };
 Multivariant.prototype.countzeros = function(val){
@@ -162,4 +216,4 @@ Multivariant.prototype.beautify = function(max,min){
                 }  
 
                 return[Number(newmax),Number(newmin)]; 
-}
+};
