@@ -1,42 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>JavaScript Get Json</title>
- <!--  <script type="text/javascript" src="js/mainlibrary.js"></script> -->
- 
- <script type="text/javascript" src="js/axis.js"></script>
- <script type="text/javascript" src="js/canvas.js"></script>
- <script type="text/javascript" src="js/chartBody.js"></script>
- <script type="text/javascript" src="js/columnChart.js"></script>
- <script type="text/javascript" src="js/dataParsing.js"></script>
- <script type="text/javascript" src="js/headerCaption.js"></script>
- <script type="text/javascript" src="js/lineChart.js"></script>
- <script type="text/javascript" src="js/listeners.js"></script>
- <script type="text/javascript" src="js/multivariant.js"></script>
- <script type="text/javascript" src="js/xaxis.js"></script>
- <script type="text/javascript" src="js/yaxis.js"></script>
+  <title>CrossTab</title>
+  <script type="text/javascript" src="js/loadjson.js"></script>
+  <script type="text/javascript" src="js/dataParsing.js"></script>
+  <script type="text/javascript" src="js/engine.js"></script>
+  <script type="text/javascript" src="js/canvas.js"></script>
+  <script type="text/javascript" src="js/crosstab.js"></script>
+  <script type="text/javascript" src="js/yaxis.js"></script>
+  <script type="text/javascript" src="js/xaxis.js"></script>
 
-  <link type="text/css" href="style/style.css" rel="stylesheet"/>
-  <style type="text/css">
+  <script type="text/javascript" src="js/listeners.js"></script>
+  <script type="text/javascript" src="js/lineChart.js"></script>
+  <script type="text/javascript" src="js/columnChart.js"></script>
+  <script type="text/javascript" src="js/headerCaption.js"></script>
+  <script type="text/javascript" src="js/chartBody.js"></script>
+  <script type="text/javascript" src="js/canvaschart.js"></script>
+  <script type="text/javascript" src="js/axis.js"></script>
 
-  </style>
+  <link type="text/css" href="css/style.css" rel="stylesheet"/>
 </head>
 <body>
-  
   <div class="chartContainer" id="chart"></div>
-
-  <script type="text/javascript">
-      var xmlhttp= new XMLHttpRequest(),mychart;
-      xmlhttp.onreadystatechange = function(){   
-        if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
-          mychart = new Multivariant(JSON.parse(xmlhttp.responseText));
-          mychart.render();
-        }
-  };
-  xmlhttp.open('GET','data/jsondata.json',true);
-  xmlhttp.send();
-  </script>
-
-
 </body>
 </html>

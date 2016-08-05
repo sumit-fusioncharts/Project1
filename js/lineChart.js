@@ -8,7 +8,7 @@ function LineChart(svgGraph,datasetStr,dataValues,ofsetx,ofsety){
 	this.ofsety = ofsety;
 };
 LineChart.prototype.draw = function(){
-	var paintB = new Canvas();
+	var paintB = new CanvasX();
 	paintB.createPoly(this.svgGraph,this.datasetStr);
 	var xy = this.datasetStr.split(" ");
 	var val = this.dataValues.split(" ");

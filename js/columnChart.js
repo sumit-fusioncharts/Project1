@@ -8,7 +8,7 @@ function ColumnChart(svgGraph,datasetStr,ofsetx,ofsety,divisionX,chartWidth){
 	this.chartWidth = chartWidth;
 };
 ColumnChart.prototype.draw = function(){
-	var paintB = new Canvas();
+	var paintB = new CanvasX();
 	var xy = this.datasetStr.split(" ");
 	var xyCor,xyCorlen = xy.length-1;
         for(var i=0;i<xyCorlen;i++){

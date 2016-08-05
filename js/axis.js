@@ -15,8 +15,8 @@ function Axis(customDataObj,divId,chartType,numOfGraphs,numOfGraphsInaRow,order)
 	this.order = order;
 
 this.draw = function(){
-	var newSvg = new Canvas(),svgVariable,y,x,body;
-	console.log(this.caption,this.subCaption);
+	var newSvg = new CanvasX(),svgVariable,y,x,body;
+
 	var captions = new CreateCaption(this.caption,this.subCaption,this.divId);
 	captions.draw();
 	var i;

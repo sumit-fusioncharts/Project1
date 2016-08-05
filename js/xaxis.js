@@ -1,5 +1,6 @@
-//defining xaxis - ticks, 
 function Xaxis(chartDetails,xAxisNames,numOfGraphs,numOfGraphsInaRow,title,currentGraph){
+	this.chartData = chartDetails;
+  this.type = (typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
 	this.chartHeight = chartDetails[0];
 	this.chartWidth = chartDetails[1];
 	this.marginxy = chartDetails[2];
@@ -8,14 +9,23 @@ function Xaxis(chartDetails,xAxisNames,numOfGraphs,numOfGraphsInaRow,title,curre
 	this.numOfGraphs = numOfGraphs;
 	this.numOfGraphsInaRow = numOfGraphsInaRow;
 	this.xAxisNames = xAxisNames;
-	this.xaxisticks = this.xAxisNames.length;
+	this.xaxisticks = (typeof this.xAxisNames === "undefined") ? "0" : this.xAxisNames.length;
 	this.divisionX = (this.chartWidth) / (this.xaxisticks);
-
 };
-Xaxis.prototype.draw = function(svgGraph){
-	var paintX = new Canvas();
+Xaxis.prototype.draw = function(mainSvg){
+	if(this.type=="crosstab"){
+		this.svg = mainSvg;
+		this.lossColor = this.chartData.chartinfo.lossColor;
+		this.profitColor = this.chartData.chartinfo.profitColor;
+		this.crosstab();		
+	}else{
+		this.drawChart(mainSvg);
+	}
+};
+Xaxis.prototype.drawChart = function(svgGraph){
+	var paintX = new CanvasX();
 	this.noOfGraphPlotted = Number(((window.innerWidth/(this.chartWidth+60)).toString()).split('.')[0]);
-  document.getElementById("svgCaption").setAttribute("width",(this.noOfGraphPlotted*(this.chartWidth+50)+this.marginxy));
+  	document.getElementById("svgCaption").setAttribute("width",(this.noOfGraphPlotted*(this.chartWidth+50)+this.marginxy));
 	if(this.numOfGraphs<=this.noOfGraphPlotted){
       //equal caption will be on top
       //calculationX = this.divisionX*i+this.marginxy+this.divisionX/2;
@@ -63,4 +73,51 @@ Xaxis.prototype.draw = function(svgGraph){
         }
       }
     }
+};
+Xaxis.prototype.crosstab = function(){
+	var zones = this.chartData.coltable;
+	var width = this.chartData.svg.cw;
+	var barHeight = this.chartData.svg.bh;
+	var barSpace = this.chartData.svg.bs;
+	var height = this.chartData.product.length*(barHeight+2*barSpace)+100;
+	var x,y=40,line,divisionX,temp;
+	var maxsos = this.chartData.maxSos;
+	var xaxiscaption = this.chartData.chartinfo.xaxiscaption;
+	divisionX = width/4;
+
+	var canvas = new Canvas();
+	
+	for(var i=2; i<=zones.length;i++){
+		x = i*width;
+		line = canvas.createLines(this.svg,x,y,x,height,"topLine","topLine");
+		temp = maxsos[i-2]/4;
+		for(var j = 1;j<4;j++){
+			canvas.createLines(this.svg,x+(divisionX*j),height-60,x+(divisionX*j),height-50,"topLine","topLine");
+			canvas.createText(this.svg,x+(divisionX*j),height-30,this.sortedTitle(temp*j),"#000","16","middle","productNames");
+			canvas.createText(this.svg,x+(width/2),height-10,xaxiscaption,"#000","16","middle","xaxiscaption");
+		}
+	}
+	
+};
+Xaxis.prototype.sortedTitle = function(titleY){
+	
+    if(titleY % 1 != 0){
+        titleY = titleY.toFixed(2);
+    }
+    var titleY_0 = titleY.toString().split(".")[0];
+    if (titleY_0.substring(0, 1) == '-') {
+      titleY_0 = Number(titleY_0.substring(1));
+      if (titleY_0 > 999 && titleY_0 < 999999) {
+        titleY = "-"+(titleY_0 / 1000).toFixed(1) + "K";
+      } else if (titleY_0 > 999999) {
+        titleY = "-"+(titleY_0 / 1000000).toFixed(1) + "M";
+      }
+    } else {
+      if (titleY_0 > 999 && titleY_0 < 999999) {
+        titleY = (titleY_0 / 1000).toFixed(1) + "K";
+      } else if (titleY_0 > 999999) {
+        titleY = (titleY_0 / 1000000).toFixed(1) + "M";
+      }
+    }
+    return titleY;
 };
