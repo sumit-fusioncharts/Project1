@@ -93,9 +93,9 @@ Yaxis.prototype.crosstab = function(){
 						ratioColor = (Math.abs(sop)/sos);
 
 						if(sop<0){//loss
-							rectColor = this.genColor(this.lossColorMax,this.lossColorMin,ratioColor,"loss");
+							rectColor = this.genColor(this.lossColorMax,this.lossColorMin,ratioColor);
 						}else{
-							rectColor = this.genColor(this.profitColorMax,this.profitColorMin,ratioColor,"profit");
+							rectColor = this.genColor(this.profitColorMax,this.profitColorMin,ratioColor);
 						}
 
 						if(data.data[i].values[j].zoneValues[k].product == "Total"){
@@ -117,17 +117,10 @@ Yaxis.prototype.plot = function(max,sos){
 	this.plotRatio = (this.chartData.svg.cw-60)/(max);
 	return this.plotRatio*sos;
 };
-Yaxis.prototype.genColor = function(clr1,clr2,rto,pol){
-	
-	if(pol=="profit"){
-		var color2 = clr1.substring(1,clr1.length);
-		var color1 = clr2.substring(1,clr2.length);
-	}else{
+Yaxis.prototype.genColor = function(clr1,clr2,rto){
+
 		var color1 = clr1.substring(1,clr1.length);
 		var color2 = clr2.substring(1,clr2.length);
-	}
-	
-
 
 	var ratio = rto;
 
