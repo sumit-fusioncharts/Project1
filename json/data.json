@@ -2,9 +2,9 @@
    "chartinfo":{
       "chartType":"crosstab",
       "ordering":"default",
-      "lossColorMin":"#ff9a57",
-      "lossColorMax":"#ea0707",
-      "profitColorMin":"#e1dede",
+      "lossColorMin":"#F79F81",
+      "lossColorMax":"#DF0101",
+      "profitColorMin":"#FFFFFF",
       "profitColorMax":"#000000",
       "xaxiscaption":"Sum of Sales"
    },
@@ -199,6 +199,10 @@
                      "product":"Chamomile",
                      "sop":"765",
                      "sos":"2194"
+                  },{  
+                     "product":"Lemon",
+                     "sop":"7901",
+                     "sos":"27176"
                   },
                   {  
                      "product":"Mint",

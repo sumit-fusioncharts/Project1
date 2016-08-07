@@ -115,14 +115,16 @@ Chart.prototype.crosstab = function(){
 	this.barSpacing = 4;
 	this.barHeight = 20;
 	
-	chartWidth = 170;
+    height = this.height("crosstab");
+    width = this.width("crosstab");
+    
+    svgHeight = height+100;
+    svgWidth = window.innerWidth-50;//width;
+
+	chartWidth = svgWidth/this.chartData.coltable.length;
     this.cwidth = chartWidth;
 
-	height = this.height("crosstab");
-	width = this.width("crosstab");
 	
-	svgHeight = height+100;
-	svgWidth = width;
 	
 	this.chartData.svg = {ct:"crosstab",bh:this.barHeight,bs:this.barSpacing,sh:svgHeight,sw:svgWidth,cw:chartWidth};
 
