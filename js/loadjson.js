@@ -5,7 +5,7 @@ window.onload=function(){
           mychart = new Visualization(JSON.parse(xmlhttp.responseText));
           chart = new Chart(mychart);
           //chart = new Chart(JSON.parse(xmlhttp.responseText));
-          chart.render("crosstab");
+          chart.render();
         }
   };
   xmlhttp.open('GET','json/data.json',true);

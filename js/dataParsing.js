@@ -245,7 +245,7 @@ Visualization.prototype.generateProductTypeArray = function(){
   return productTypeArray;
 };
 Visualization.prototype.generateProductArray = function(){
-  var productArray = [],x;
+  var productArray = [],x,tempP = [];
   var tempObj = this.chartdata.data;
   for(var i in tempObj){
     for(var j in tempObj[i].values){
@@ -253,20 +253,28 @@ Visualization.prototype.generateProductArray = function(){
         if(tempObj[i].values[j].zoneValues[k].product.slice(0, -1)!="Total"){
           x=i;
           if(!lookup(tempObj[i].values[j].zoneValues[k].product)){
-            productArray.push(tempObj[i].values[j].zoneValues[k].product);
+            tempP.push(tempObj[i].values[j].zoneValues[k].product);
           }
         }
       }
     }
+    addToArr(tempP,productArray);
+    tempP = [];
     productArray.push("Total"+x);
   }
+  function addToArr(x,y){
+    x.sort();
+    for(var i in x){
+      y.push(x[i]);
+    }
+  }
   function lookup(val){
-    len = productArray.length,bool = false;
+    len = tempP.length,bool = false;
     if(len<1){
       bool = false;
     }else{
       while(len--){
-        if(productArray[len]==val){
+        if(tempP[len]==val){
           bool = true;
           break;
         }

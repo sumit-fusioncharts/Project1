@@ -1,6 +1,6 @@
 function Yaxis(chartDetails,chartObj){
 	this.chartData =chartDetails;
-	this.type = (typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
+	this.type = this.chartData.chartinfo.chartType;//(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
 	this.chartHeight = chartDetails[0];
 	this.chartWidth = chartDetails[1];
 	this.marginxy = chartDetails[2];
@@ -45,14 +45,16 @@ Yaxis.prototype.crosstab = function(){
 	var halfDistance = distance/2;
 	var width = this.chartData.svg.sw;
 	var product,pCnt = 0;
-	this.plotRatio ;var sos,popol,rectColor;
+	var sos,popol,rectColor;
+	var zonePos,max,bw,temp;
+	this.plotRatio;
+
 	for(var i in this.chartData.coltable){
 		var tempx = (Number(i)+1)*this.chartData.svg.cw;
 		var tempx2 = (Number(i))*this.chartData.svg.cw;
 		
 		canvas.createText(mainSvg,tempx2+halfDistance,25,this.chartData.coltable[i],"#000","16","middle","toptext");
 		canvas.createLines(mainSvg,tempx,10,tempx,40,"vtopLine","vtopLine");
-
 	}
 
 	for(var j=0; j<data.data.length; j++){
@@ -64,7 +66,7 @@ Yaxis.prototype.crosstab = function(){
 		py=counter*(this.chartData.svg.bh+this.chartData.svg.bs*2)+ 40;
 		canvas.createLines(mainSvg,0,py,width,py,"topLine","topLine");
 	}
-	var zonePos,max,bw,temp;
+
 	for(var d = 0;d<data.product.length;d++){
 		py = this.chartData.svg.bs+40+d*(this.chartData.svg.bh+this.chartData.svg.bs*2);
 		px = distance+20;

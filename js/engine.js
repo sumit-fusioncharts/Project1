@@ -1,13 +1,12 @@
 function Chart(chartobj){
 	this.chartData = chartobj;
-
-	this.chartdata = chartobj;
-	this.render = function(chartType){
+    var chartType = this.chartData.chartinfo.chartType;
+	this.render = function(){
 		if(chartType=="crosstab"){
 			this.crosstab();
 		}else if(chartType=="line" || chartType=="column"){
 			
-			var chartInfo = new Visualization(this.chartdata);
+			var chartInfo = new Visualization(this.chartData);
 			this.separator = chartInfo.separator();
 			this.svgHeight = chartInfo.svgheight();
 			this.svgWidth = chartInfo.svgWidth();
@@ -116,7 +115,8 @@ Chart.prototype.crosstab = function(){
 	this.barSpacing = 4;
 	this.barHeight = 20;
 	
-	chartWidth = 270;
+	chartWidth = 170;
+    this.cwidth = chartWidth;
 
 	height = this.height("crosstab");
 	width = this.width("crosstab");
@@ -169,9 +169,8 @@ Chart.prototype.height = function(type){
 };
 Chart.prototype.width =  function(type){
 	if(type=="crosstab"){
-        console.log(this.chartData);
 		var tempObj = this.chartData.coltable;
-		return tempObj.length*270;
+		return tempObj.length*this.cwidth;
 	}//end of cross tab width
 	else if(type=="line"){
 		

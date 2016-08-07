@@ -1,6 +1,7 @@
 function Xaxis(chartDetails,xAxisNames,numOfGraphs,numOfGraphsInaRow,title,currentGraph){
 	this.chartData = chartDetails;
-  this.type = (typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
+  //console.log(this.chartData.chartinfo.chartType);
+  this.type = this.chartData.chartinfo.chartType; //(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
 	this.chartHeight = chartDetails[0];
 	this.chartWidth = chartDetails[1];
 	this.marginxy = chartDetails[2];
@@ -87,9 +88,12 @@ Xaxis.prototype.crosstab = function(){
 
 	var canvas = new Canvas();
 	
-	for(var i=2; i<=zones.length;i++){
+	for(var i=2; i<zones.length;i++){
 		x = i*width;
 		line = canvas.createLines(this.svg,x,y,x,height,"topLine","topLine");
+    if (i == zones.length-1){
+      line = canvas.createLines(this.svg,x+width,y,x+width,height,"topLine","topLine");
+    }
 		temp = maxsos[i-2]/4;
 		for(var j = 1;j<4;j++){
 			canvas.createLines(this.svg,x+(divisionX*j),height-60,x+(divisionX*j),height-50,"topLine","topLine");

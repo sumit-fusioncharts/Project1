@@ -1,12 +1,10 @@
 {  
-   "chartinfo":{  
-      "caption":"",
-      "subcaption":"",
+   "chartinfo":{
       "chartType":"crosstab",
       "ordering":"default",
-      "lossColorMin":"#FFFFFF",
-      "lossColorMax":"#B60C0C",
-      "profitColorMin":"#FFFFFF",
+      "lossColorMin":"#ff9a57",
+      "lossColorMax":"#ea0707",
+      "profitColorMin":"#e1dede",
       "profitColorMax":"#000000",
       "xaxiscaption":"Sum of Sales"
    },
