@@ -6,10 +6,15 @@ function Visualization(chartdata,mode){
   if(typeMode=="undefined" && type != "crosstab"){
       return chartdata;
   }else if(typeMode=="undefined" && type == "crosstab"){
-    if(typeof lossColorMin === "undefined"){
-      divId.innerHTML = "<p id='pError'>Chart Cannot be rendered with the given Data</p>";
+    if(typeof this.chartdata.chartinfo.lossColorMin === "undefined"){
+      divId.innerHTML = "<p id='pError'>Chart Cannot be rendered</p>";
       return false;
     }
+  }else if(typeMode!="undefined" && type != "crosstab"){
+      if(typeof this.chartdata.chartinfo.chartsPositioning === "undefined"){
+          divId.innerHTML = "<p id='pError'>Chart Cannot be rendered</p>";
+          return false;
+      }
   }
 
 
