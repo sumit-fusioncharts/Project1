@@ -54,7 +54,10 @@ Yaxis.prototype.crosstab = function(){
 		var tempx2 = (Number(i))*this.chartData.svg.cw;
 		
 		canvas.createText(mainSvg,tempx2+halfDistance,25,this.chartData.coltable[i],"#000","17","middle","topCaption");
-		canvas.createLines(mainSvg,tempx,10,tempx,40,"vtopLine","vtopLine");
+		if(i!="0"){
+			canvas.createLines(mainSvg,tempx,10,tempx,40,"vtopLine","vtopLine");
+		}
+		
 	}
 
 	for(var j=0; j<data.data.length; j++){
