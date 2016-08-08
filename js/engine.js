@@ -109,7 +109,6 @@ function Chart(chartobj){
 
 			this.drawchart();
 		}else{
-            console.log("in");
             return this.chartData;
         }
 	}

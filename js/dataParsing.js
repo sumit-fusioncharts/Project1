@@ -3,6 +3,10 @@ function Visualization(chartdata,mode){
   var type = this.chartdata.chartinfo.chartType;
   var typeMode = typeof mode;
   var divId = document.getElementById("chart");
+  if(type != "column" && type!="line" && type!="crosstab"){
+      divId.innerHTML = "<p id='pError'>Chart Cannot be rendered</p>";
+      return false;
+  }
   if(typeMode=="undefined" && type != "crosstab"){
       return chartdata;
   }else if(typeMode=="undefined" && type == "crosstab"){
