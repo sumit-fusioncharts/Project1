@@ -1,6 +1,6 @@
 {  
    "chartinfo":{
-      "chartType":"line",
+      "chartType":"crosstab",
       "ordering":"default",
       "lossColorMin":"#F79F81",
       "lossColorMax":"#DF0101",
