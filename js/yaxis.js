@@ -53,7 +53,7 @@ Yaxis.prototype.crosstab = function(){
 		var tempx = (Number(i)+1)*this.chartData.svg.cw;
 		var tempx2 = (Number(i))*this.chartData.svg.cw;
 		
-		canvas.createText(mainSvg,tempx2+halfDistance,25,this.chartData.coltable[i],"#000","16","middle","toptext");
+		canvas.createText(mainSvg,tempx2+halfDistance,25,this.chartData.coltable[i],"#000","17","middle","topCaption");
 		canvas.createLines(mainSvg,tempx,10,tempx,40,"vtopLine","vtopLine");
 	}
 
@@ -61,10 +61,10 @@ Yaxis.prototype.crosstab = function(){
 		px = halfDistance;
 		py = counter*(this.chartData.svg.bh+this.chartData.svg.bs*2)+ 60;
 		counter += this.chartData.epg[j];
-		canvas.createText(mainSvg,40,py,data.data[j].product_type,"#000","16","start","toptext");
+		canvas.createText(mainSvg,90,py,data.data[j].product_type,"#000","16","start","toptext");
 
 		py=counter*(this.chartData.svg.bh+this.chartData.svg.bs*2)+ 40;
-		canvas.createLines(mainSvg,0,py,width,py,"topLine","topLine");
+		canvas.createLines(mainSvg,30,py,width,py,"topLine","topLine");
 	}
 
 	for(var d = 0;d<data.product.length;d++){
@@ -74,9 +74,11 @@ Yaxis.prototype.crosstab = function(){
 		temp = product;
 		if(product.slice(0, -1)=="Total"){
 			temp = "Total";
+			canvas.createText(mainSvg,px,py+15,temp,"#000","17","start","itemTotal");
+		}else{
+			canvas.createText(mainSvg,px,py+15,temp,"#000","17","start","productNames");
 		}
-
-		canvas.createText(mainSvg,px,py+15,temp,"#000","16","start","productNames");
+		
 		for(var i in data.data){
 			 
 			for(var j=0;j<data.data[i].values.length;j++){

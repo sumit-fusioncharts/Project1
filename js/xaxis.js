@@ -96,8 +96,8 @@ Xaxis.prototype.crosstab = function(){
     }
 		temp = maxsos[i-2]/4;
 		for(var j = 1;j<4;j++){
-			canvas.createLines(this.svg,x+(divisionX*j),height-60,x+(divisionX*j),height-50,"topLine","topLine");
-			canvas.createText(this.svg,x+(divisionX*j),height-30,this.sortedTitle(temp*j),"#000","16","middle","productNames");
+			canvas.createLines(this.svg,x+(divisionX*j),height-60,x+(divisionX*j),height-50,"ticks","ticks");
+			canvas.createText(this.svg,x+(divisionX*j),height-30,this.sortedTitle(temp*j),"#000","15","middle","productNames");
 			canvas.createText(this.svg,x+(width/2),height-10,xaxiscaption,"#000","16","middle","xaxiscaption");
 		}
 	}

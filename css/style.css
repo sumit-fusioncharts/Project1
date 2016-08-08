@@ -118,3 +118,17 @@
   box-shadow: 0 0 10px rgba(92,172,238,0.8);
   padding-top: 20px;
 }
+.itemTotal{
+  font-weight: bold;
+}
+.toptext{
+
+}
+.topCaption{
+  font-family: tahoma;
+  font-size: 20px;
+}
+.ticks{
+  stroke: #000;
+  stroke-width:0.5px; 
+}

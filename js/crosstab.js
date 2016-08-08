@@ -11,7 +11,7 @@ Crosstab.prototype.drawComponents = function(){
 	
 	var canvas = new Canvas();
 	var mainSvg = canvas.createSvg(width+1,height+1,"mainSvg","mainSvgClass",chartContainer);
-		canvas.createLines(mainSvg,0,40,width,40,"topLine","topLine");
+		canvas.createLines(mainSvg,30,40,width,40,"topLine","topLine");
 	
 	var yaxis = new Yaxis(this.chartData);
 		yaxis.draw(mainSvg);
