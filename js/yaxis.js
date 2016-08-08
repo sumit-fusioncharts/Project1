@@ -1,6 +1,6 @@
 function Yaxis(chartDetails,chartObj){
 	this.chartData =chartDetails;
-	this.type = this.chartData.chartinfo.chartType;//(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
+	this.type = typeof this.chartData.chartinfo === "undefined" ? "other" : this.chartData.chartinfo.chartType;//(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
 	this.chartHeight = chartDetails[0];
 	this.chartWidth = chartDetails[1];
 	this.marginxy = chartDetails[2];

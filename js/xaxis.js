@@ -1,7 +1,7 @@
 function Xaxis(chartDetails,xAxisNames,numOfGraphs,numOfGraphsInaRow,title,currentGraph){
 	this.chartData = chartDetails;
   //console.log(this.chartData.chartinfo.chartType);
-  this.type = this.chartData.chartinfo.chartType; //(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
+  this.type = typeof this.chartData.chartinfo === "undefined" ? "other" : this.chartData.chartinfo.chartType;//this.chartData.chartinfo.chartType; //(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
 	this.chartHeight = chartDetails[0];
 	this.chartWidth = chartDetails[1];
 	this.marginxy = chartDetails[2];

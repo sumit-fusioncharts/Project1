@@ -1,12 +1,14 @@
 function Chart(chartobj){
 	this.chartData = chartobj;
-    var chartType = this.chartData.chartinfo.chartType;
+    var chartType = (typeof this.chartData.chartinfo == "undefined") ? this.chartData.chartdatafun().chartinfo.chartType : this.chartData.chartinfo.chartType;
 	this.render = function(){
 		if(chartType=="crosstab"){
-			this.crosstab();
+			
+            this.crosstab();
+
 		}else if(chartType=="line" || chartType=="column"){
 			
-			var chartInfo = new Visualization(this.chartData);
+			var chartInfo = new Visualization(this.chartData,"dothis");
 			this.separator = chartInfo.separator();
 			this.svgHeight = chartInfo.svgheight();
 			this.svgWidth = chartInfo.svgWidth();
@@ -16,7 +18,7 @@ function Chart(chartobj){
 			this.xAxisNames = chartInfo.xAxisNames(this.separator); xlen = this.xAxisNames.length;
 			this.chartArrengement = chartInfo.chartArrengement();
 			this.chartType = chartInfo.chartType();
-	        this.caption = chartInfo.caption();
+	        this.caption = chartInfo.caption(); console.log(this.caption);
 	        this.subCaption = chartInfo.subCaption();
 	        this.dataSet = chartInfo.dataSet();
 	        this.customData = chartInfo.customize();
@@ -106,7 +108,10 @@ function Chart(chartobj){
             };
 
 			this.drawchart();
-		}
+		}else{
+            console.log("in");
+            return this.chartData;
+        }
 	}
 	
 };

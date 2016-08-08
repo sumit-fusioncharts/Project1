@@ -1,12 +1,21 @@
-function Visualization(chartdata){
-  this.chartdata = chartdata;
+function Visualization(chartdata,mode){
+  this.chartdata = chartdata; 
+  var type = this.chartdata.chartinfo.chartType;
+  var typeMode = typeof mode; 
+  if(typeMode=="undefined" && type != "crosstab"){
+      return chartdata;
+  }
+
+
   this.numProductType = (typeof this.chartdata.data === "undefined") ? "0" : this.chartdata.data.length;
   this.elementsPerGroup = [];
-  if(this.chartdata.chartinfo.chartType=="crosstab"){
-    
+
+
+  if(type=="crosstab"){  
     return this.createDataTable(); 
   }
-  else{
+  else if(type == "line" || type == "column" && typeMode!="undefined"){
+    
     this.dataObj = chartdata;
     this.xAxisNames = function(separator){
       return (this.dataObj.timestamp.time).split(separator);
