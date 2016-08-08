@@ -7,6 +7,6 @@ window.onload=function(){
           chart.render();
         }
   };
-  xmlhttp.open('GET','json/data.json',true);
+  xmlhttp.open('GET','json/jsondata.json',true);
   xmlhttp.send();
 };

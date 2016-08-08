@@ -104,3 +104,11 @@
   width: 0px;
   height: 0px;
 }
+#pError{
+  font-family: tahoma;
+  font-weight: bold;
+  font-size: 20px;
+  color:#ff0000;
+  text-align: center;
+  cursor: not-allowed;
+}

@@ -1,9 +1,15 @@
 function Visualization(chartdata,mode){
   this.chartdata = chartdata; 
   var type = this.chartdata.chartinfo.chartType;
-  var typeMode = typeof mode; 
+  var typeMode = typeof mode;
+  var divId = document.getElementById("chart");
   if(typeMode=="undefined" && type != "crosstab"){
       return chartdata;
+  }else if(typeMode=="undefined" && type == "crosstab"){
+    if(typeof lossColorMin === "undefined"){
+      divId.innerHTML = "<p id='pError'>Chart Cannot be rendered with the given Data</p>";
+      return false;
+    }
   }
 
 

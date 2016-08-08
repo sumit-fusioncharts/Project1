@@ -113,7 +113,6 @@ function Chart(chartobj){
             return this.chartData;
         }
 	}
-	
 };
 Chart.prototype.crosstab = function(){
 	var height,width,svgHeight,svgWidth,xaxisticks = 3,chartWidth;
