@@ -1,210 +1,125 @@
-function Chart(chartobj){
-	this.chartData = chartobj;
-    var chartType = (typeof this.chartData.chartinfo == "undefined") ? this.chartData.chartdatafun().chartinfo.chartType : this.chartData.chartinfo.chartType;
-	this.render = function(){
-		if(chartType=="crosstab"){
-			
-            this.crosstab();
+//engine.js
+function Engine(_object){
+	if(_object==false){
+		//unable to parse show error
+	}
+	this.obj = _object;
+}
+Engine.prototype.render = function(renderType){
+	var engine = this,
+		obj = engine && engine.obj,
+        model = obj && obj.model,
+        zones = model.zones,
+        maxpz = model && model.maxperzone,
+		info = obj && obj.chart,
+		chartType = info && info.chartType, //throw error if undefined
+		chartData = obj && obj.data,
+		index,
+        maxMinAvg,
+        temp,
+        canvas,
+        svgHeight,
+        svgWidth,
+        chartHeight,
+        chartWidth,
+        marginx,
+        marginy,
+        i,
+		j;
 
-		}else if(chartType=="line" || chartType=="column"){
-			
-			var chartInfo = new Visualization(this.chartData,"dothis");
-			this.separator = chartInfo.separator();
-			this.svgHeight = chartInfo.svgheight();
-			this.svgWidth = chartInfo.svgWidth();
-			this.numOfGraphsInaRow = chartInfo.numOfGraphsInaRow();
-			this.numOfGraphs = chartInfo.numOfGraphs();
-			this.chartDiv = chartInfo.chartDiv();
-			this.xAxisNames = chartInfo.xAxisNames(this.separator); xlen = this.xAxisNames.length;
-			this.chartArrengement = chartInfo.chartArrengement();
-			this.chartType = chartInfo.chartType();
-	        this.caption = chartInfo.caption(); console.log(this.caption);
-	        this.subCaption = chartInfo.subCaption();
-	        this.dataSet = chartInfo.dataSet();
-	        this.customData = chartInfo.customize();
+	if(typeof renderType === "undefined"){
+		renderType = chartType;
+	}
 
-			this.chartHeight = this.svgHeight-100;
-			this.chartWidth = this.svgWidth-60;
-			this.margin = 50;
+	if(renderType == "crosstab"){
+        
+        //set crostab width,height
+        var barHeight = 30,
+            barSpace = 5,
+            height = 0,
+            axis = model && model.axis;
 
-            this.divOrder = function(){
-                var ordereddArr = [],temp = [], data = chartInfo.customize();
+        chartWidth = (typeof info.width === "undefined") ? 200 : info.width;
+        svgWidth = chartWidth * zones.length;
+        
+        for(i in model.axis){
+            height += model.axis[i].length * (2*barSpace+barHeight);
+        }
+        chartHeight = height;
+        svgHeight = height+100;
+        obj.svgDetails = {svgHeight:svgHeight,svgWidth:svgWidth,chartWidth:chartWidth,chartHeight:chartHeight,
+            barHeight:barHeight,barSpace:barSpace};
 
-                var maxtomin = function(){
-                    for(var i in data){
-                        temp.push(data[i].max);
-                    }
-                    temp = temp.sort(max2min);
-                    for(var i in temp){
-                       for(var j in data){
-                         if(temp[i]==data[j].max){
-                            ordereddArr.push(data[j].index);
-                            }
-                        }
-                    }
-                }
-                var mintomax = function(){
-                    for(var i in data){
-                        temp.push(data[i].min);
-                    }
-                    temp = temp.sort(min2max);
-                    for(var i in temp){
-                       for(var j in data){
-                         if(temp[i]==data[j].min){
-                            ordereddArr.push(data[j].index);
-                         }
-                       }
-                    }
+        crosstab = new Crosstab(obj);
+        crosstab.draw();
 
-                }
-                var avgmaxtomin = function(){
-                    for(var i in data){
-                        temp.push(data[i].avg);
-                    }
-                    temp = temp.sort(max2min);
-                    for(var i in temp){
-                       for(var j in data){
-                         if(temp[i]==data[j].avg){
-                            ordereddArr.push(data[j].index);
-                            }
-                        }
-                    }
-                }
-                var avgmintomax = function(){
-                    for(var i in data){
-                        temp.push(data[i].avg);
-                    }
-                    temp = temp.sort(min2max);
-                    for(var i in temp){
-                       for(var j in data){
-                         if(temp[i]==data[j].avg){
-                            ordereddArr.push(data[j].index);
-                            }
-                        }
-                    }
-                }
-                var defaultorder = function(){
-                    for(var i in data){
-                        ordereddArr.push(data[i].index);
-                    }
-                }
-                switch(this.chartArrengement){
-                    case "maxtomin": maxtomin();break;
-                    case "mintomax": mintomax();break;
-                    case "avgmaxtomin": avgmaxtomin();break; 
-                    case "avgmintomax": avgmintomax();break; 
-                    default : defaultorder();break;  
-                }
-                return ordereddArr;
-            }
-            var max2min = function(a,b){
-              return b-a;
-            };
-            var min2max = function(a,b){
-              return a-b;
-            };
-            var sum = function(a,b){
-              return a+b;
-            };
+	}else if(renderType == "line" || renderType == "column"){
+        if(chartType == "line" || chartType == "column"){
+            for(i in chartData){
+                //beautify max min
+                maxMinAvg = chartData[i].maxMinAvg;
+                temp = engine.beautify(maxMinAvg[0],maxMinAvg[1]);
+                chartData[i].newMaxMin = temp;
+            }        
+        }
 
-			this.drawchart();
-		}else{
-            return this.chartData;
+        svgWidth = (typeof info.width === "undefined") ? 300 : info.width;
+        marginx = 50;
+        chartWidth = svgWidth - marginx;
+        svgHeight = (typeof info.height === "undefined") ? 300 : info.height;
+        marginy = 50;
+        chartHeight = svgHeight - marginy;
+
+        obj.svgDetails = {svgHeight:svgHeight,svgWidth:svgWidth,chartHeight:chartHeight,chartWidth:chartWidth,
+            marginx:marginx,marginy:marginy};
+
+        if(renderType == "line"){
+            line = new Line(obj);
+            line.draw();
+        }else{
+            column = new Column(obj);
+            column.draw();
         }
 	}
 };
-Chart.prototype.crosstab = function(){
-	var height,width,svgHeight,svgWidth,xaxisticks = 3,chartWidth;
-	this.barSpacing = 4;
-	this.barHeight = 20;
-	
-    height = this.height("crosstab");
-    width = this.width("crosstab");
-    
-    svgHeight = height+100;
-    svgWidth = window.innerWidth-50;//width;
 
-	chartWidth = svgWidth/this.chartData.coltable.length;
-    this.cwidth = chartWidth;
-
-	
-	
-	this.chartData.svg = {ct:"crosstab",bh:this.barHeight,bs:this.barSpacing,sh:svgHeight,sw:svgWidth,cw:chartWidth};
-
-	//plotRatio = this.chartHeight/(this.newmax-this.newmin);
-	//console.log(this.chartData);
-
-	var cTab = new Crosstab(this.chartData);
-		cTab.drawComponents();
-};
-
-Chart.prototype.height = function(type){
-	if(type=="crosstab"){
-		var tempObj = this.chartData.data;
-		var tempArr = [], cnt=-1;
-		for(var i in tempObj){
-			for(var j in tempObj[i].values){
-				for(var k in tempObj[i].values[j].zoneValues){
-					if(!lookup(tempObj[i].values[j].zoneValues[k].product)){
-			          tempArr.push(tempObj[i].values[j].zoneValues[k].product);
-			        }
+Engine.prototype.getMax = function(_searchDirectry,_condition){
+	var temp = 0,
+		i,
+		__condition = _condition,
+		__data = _searchDirectry;
+		
+	if(typeof __condition != "undefined"){
+		for(i in __data){
+			if(__data[i].region == __condition){
+				if(__data[i].sos>temp){
+					temp = __data[i].sos;
 				}
 			}
-			cnt++;
 		}
-		function lookup(val){
-		    len = tempArr.length,bool = false;
-		    if(len<1){
-		      bool = false;
-		    }else{
-		      while(len--){
-		        if(tempArr[len]==val){
-		          bool = true;
-		          break;
-		        }
-		      }
-		    }
-		    return bool;
-		  }
-		return (this.barHeight + (this.barSpacing*2))*(tempArr.length + cnt);
-	}//end of the crosstab Height
-	else if(type=="line"){
-
-	}
-};
-Chart.prototype.width =  function(type){
-	if(type=="crosstab"){
-		var tempObj = this.chartData.coltable;
-		return tempObj.length*this.cwidth;
-	}//end of cross tab width
-	else if(type=="line"){
-		
-	}
-};
-Chart.prototype.drawchart = function(){
-	    var order = this.divOrder();
-		var temp,i,axisObj={};
-		for(var i in this.customData){
-
-			temp = this.beautify(this.customData[i].max,this.customData[i].min);
-			if(temp[0]==temp[1]){
-	           temp[1] = temp[0]-10; temp[0] = temp[0]+10;
-		    }else{
-		       temp = this.beautify(temp[0],temp[1]);
-		    }
-			this.customData[i].newmax = temp[0];
-			this.customData[i].newmin = temp[1];
-			
+	}else{
+		for(i in __data){
+			if(__data[i]>temp){
+				temp = __data[i];
+			}
 		}
-
-		axisObj.y = this.customData;
-		axisObj.x = this.xAxisNames;
-		axisObj.chartDetails = [this.chartHeight,this.chartWidth,this.margin,this.caption,this.subCaption];
-
-		var axisInstance = new Axis(axisObj,this.chartDiv,this.chartType,this.numOfGraphs,this.numOfGraphsInaRow,order);
-		axisInstance.draw();
+	}
+	return temp;
 };
-Chart.prototype.countzeros = function(val){
+
+Engine.prototype.beautifyMax = function(_num){
+		var temp = 1,
+			val = _num;
+	    length = Math.log(val) * Math.LOG10E + 1 | 0;
+	    length -= 2;
+	    while(length--){
+	     temp = temp*10;
+	    }
+	    val = Math.ceil(val / temp) * temp;
+	    return val;
+};
+
+Engine.prototype.countzeros = function(val){
         var cnt=0,len;
         for(var i=0;i<val.length;i++){
             if(val[i]=="0"){
@@ -215,21 +130,21 @@ Chart.prototype.countzeros = function(val){
         }
         return cnt;
     }
-Chart.prototype.addLeadingzeros = function(val,cnt){
+Engine.prototype.addLeadingzeros = function(val,cnt){
     if(typeof val!="string"){val=val.toString();}
         while (val.length <= cnt){
             val = "0" + val;
         }
         return val;
     };
-Chart.prototype.removeNeg = function(val){
+Engine.prototype.removeNeg = function(val){
         val = val.toString();
             if (val.substring(0, 1) == '-') {
             val = Number(val.substring(1));        
         }//now max does not contains "-"
         return val;
     };
-Chart.prototype.genUp = function(val){
+Engine.prototype.genUp = function(val){
           var len = val.length,temp;
           if (len > 3) {
             temp = (Number(val[len - 3]) + 1) * 100;
@@ -239,7 +154,7 @@ Chart.prototype.genUp = function(val){
           }
           return temp;
     };
-Chart.prototype.genDown = function(val){
+Engine.prototype.genDown = function(val){
          var len = val.length,temp;
           if (len == 1) {
             temp = 0;
@@ -253,7 +168,7 @@ Chart.prototype.genDown = function(val){
         }
       return temp;
     };
-Chart.prototype.beautify = function(max,min){
+Engine.prototype.beautify = function(max,min){
 	var cnt=0,negMax=false,negMin=false,newmax,newmin;//typeval solid,single
             if(max<0){negMax=true;
                    max=this.removeNeg(max); 
@@ -313,14 +228,13 @@ Chart.prototype.beautify = function(max,min){
                         }
                     }
                 }else{
-                    newmin = min.toString();//normal 200-down,234-down,(200,neg=up)
+                    newmin = min.toString();
+                    //normal 200-down,234-down,(200,neg=up)
                     if(negMin==true){
                         newmin = "-"+this.genUp(newmin);
                     }else{
                         newmin = this.genDown(newmin);
                     }
                 }  
-
-                return[Number(newmax),Number(newmin)]; 
+    return[Number(newmax),Number(newmin)]; 
 };
-
