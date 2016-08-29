@@ -1,127 +1,188 @@
-function Xaxis(chartDetails,xAxisNames,numOfGraphs,numOfGraphsInaRow,title,currentGraph){
-	this.chartData = chartDetails;
-  //console.log(this.chartData.chartinfo.chartType);
-  this.type = typeof this.chartData.chartinfo === "undefined" ? "other" : this.chartData.chartinfo.chartType;//this.chartData.chartinfo.chartType; //(typeof this.chartData.svg === "undefined") ? "default":this.chartData.svg.ct;
-	this.chartHeight = chartDetails[0];
-	this.chartWidth = chartDetails[1];
-	this.marginxy = chartDetails[2];
-	this.title = title;
-	this.currentGraph = currentGraph;
-	this.numOfGraphs = numOfGraphs;
-	this.numOfGraphsInaRow = numOfGraphsInaRow;
-	this.xAxisNames = xAxisNames;
-	this.xaxisticks = (typeof this.xAxisNames === "undefined") ? "0" : this.xAxisNames.length;
-	this.divisionX = (this.chartWidth) / (this.xaxisticks);
+//xaxis.js
+function Xaxis(_canvas, _svg) {
+    Axis.call(this, _canvas, _svg);
+    this.arr = [];
+}
+Xaxis.prototype = Object.create(Axis.prototype);
+Xaxis.prototype.constructor = Xaxis;
+Xaxis.prototype.draw = function(_drawingObj) {
+    var xaxis = this,
+        canvas = xaxis && xaxis.canvas,
+        svg = xaxis && xaxis.svg,
+        svgDetails = xaxis && xaxis.svgDetails,
+        drawingObj = _drawingObj,
+        i;
+    //xaxis.drawTicks(_lenTick,_width,_numTicks,_x,_y,_isVertical,_id,_posTicks);
 };
-Xaxis.prototype.draw = function(mainSvg){
-	if(this.type=="crosstab"){
-		this.svg = mainSvg;
-		this.lossColor = this.chartData.chartinfo.lossColor;
-		this.profitColor = this.chartData.chartinfo.profitColor;
-		this.crosstab();		
-	}else{
-		this.drawChart(mainSvg);
-	}
-};
-Xaxis.prototype.drawChart = function(svgGraph){
-	var paintX = new CanvasX();
-	this.noOfGraphPlotted = Number(((window.innerWidth/(this.chartWidth+60)).toString()).split('.')[0]);
-  	document.getElementById("svgCaption").setAttribute("width",(this.noOfGraphPlotted*(this.chartWidth+50)+this.marginxy));
-	if(this.numOfGraphs<=this.noOfGraphPlotted){
-      //equal caption will be on top
-      //calculationX = this.divisionX*i+this.marginxy+this.divisionX/2;
-      paintX.createRect(svgGraph,this.marginxy-5,2,35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
-      paintX.createText(svgGraph,(this.chartWidth)/2+this.marginxy,25,this.title,"#000",16,"middle","mainCaptionText");
-      if(this.chartType!="line"){
-        if(this.currentGraph>=(this.numOfGraphs-this.noOfGraphPlotted)){
-          for(i=0;i<this.xaxisticks;i++){       
-            paintX.createText(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+this.marginxy+15),this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
-          }
-        }
-        for(i=0;i<this.xaxisticks;i++){
-          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+5+this.marginxy),(this.divisionX*i+this.marginxy+this.divisionX/2),(this.chartHeight+5+this.marginxy+5),"xaxisticks","xaxisticksClass");
-        }
-      }else{
-        for(i=0;i<this.xaxisticks+1;i++){
-          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+5),(this.divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+10),"xaxisticks","xaxisticksClass");
-        }
-        if(this.currentGraph<=(this.noOfGraphPlotted-1)){
-          for(i=0;i<this.xaxisticks+1;i++){
-            paintX.createText(svgGraph,(this.divisionX*i+this.marginxy),(this.chartHeight+this.marginxy+15),this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
-          }
-        }
-      }
-    }else{
-      paintX.createRect(svgGraph,this.marginxy-5,(this.chartHeight+this.marginxy+10),35,this.chartWidth-this.marginxy+10,"graphTop","graphTopClass");
-      paintX.createText(svgGraph,(this.chartWidth)/2+this.marginxy,(this.chartHeight+this.marginxy+32),this.title,"#000",16,"middle","mainCaptionText");
-      if(this.chartType=="line"){
-        for(i=0;i<this.xaxisticks+1;i++){
-            paintX.createLines(url,svgGraph,(this.divisionX*i+this.marginxy),(this.marginxy-5),(this.divisionX*i+this.marginxy),(this.marginxy-10),"xaxisticks","xaxisticksClass");
-        }
-        if(this.currentGraph<=(this.noOfGraphPlotted-1)){
-          for(i=0;i<this.xaxisticks+1;i++){
-            paintX.createText(svgGraph,(this.divisionX*i+this.marginxy),2,this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
-          }
-        }
-      }else{
-        if(this.currentGraph<=(this.noOfGraphPlotted-1)){
-          for(i=0;i<this.xaxisticks;i++){       
-            paintX.createText(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),2,this.xAxisNames[i],"#000",11,"start","xaxisticksNames");
-          }
-        }
-        for(var i=0;i<this.xaxisticks;i++){
-          paintX.createLines(svgGraph,(this.divisionX*i+this.marginxy+this.divisionX/2),(this.marginxy-5),(this.divisionX*i+this.marginxy+this.divisionX/2),(this.marginxy-10),"xaxisticks","xaxisticksClass");
-        }
-      }
-    }
-};
-Xaxis.prototype.crosstab = function(){
-	var zones = this.chartData.coltable;
-	var width = this.chartData.svg.cw;
-	var barHeight = this.chartData.svg.bh;
-	var barSpace = this.chartData.svg.bs;
-	var height = this.chartData.product.length*(barHeight+2*barSpace)+100;
-	var x,y=40,line,divisionX,temp;
-	var maxsos = this.chartData.maxSos;
-	var xaxiscaption = this.chartData.chartinfo.xaxiscaption;
-	divisionX = width/4;
+Xaxis.prototype.drawCrossTabLines = function(top, left, _id, model, svgDetails) {
 
-	var canvas = new Canvas();
-	
-	for(var i=2; i<zones.length;i++){
-		x = i*width;
-		line = canvas.createLines(this.svg,x,y,x,height,"topLine","topLine");
-    if (i == zones.length-1){
-      line = canvas.createLines(this.svg,x+width,y,x+width,height,"topLine","topLine");
+    var axis = this,
+        svg = axis && axis.element,//svg in which the data will be ploted
+        canvas = axis && axis.canvas,//canvas instanse
+        id = _id,
+        classname = _id + "Class",
+        products = model.products,
+        subProducts = model.axis,
+        svgDetails = svgDetails,
+        barH = svgDetails.barHeight,
+        barS = svgDetails.barSpace,
+        svgW = svgDetails.svgWidth,
+        i,
+        num;
+
+    for (i in products) {
+        num = subProducts[i].length * (2 * barS + barH);
+        top += num;
+        canvas.createLines(svg, left, top, svgW, top, classname, id);
     }
-		temp = maxsos[i-2]/4;
-		for(var j = 1;j<4;j++){
-			canvas.createLines(this.svg,x+(divisionX*j),height-60,x+(divisionX*j),height-50,"ticks","ticks");
-			canvas.createText(this.svg,x+(divisionX*j),height-30,this.sortedTitle(temp*j),"#000","15","middle","productNames");
-			canvas.createText(this.svg,x+(width/2),height-10,xaxiscaption,"#000","16","middle","xaxiscaption");
-		}
-	}
-	
 };
-Xaxis.prototype.sortedTitle = function(titleY){
-	
-    if(titleY % 1 != 0){
-        titleY = titleY.toFixed(2);
+Xaxis.prototype.drawPlottedData = function(dataset, radius, arr) {
+    var axis = this,
+        svg = axis && axis.element,//svg in which the data will be ploted
+        canvas = axis && axis.canvas,//canvas instanse
+        xy = dataset.split(" "),
+        xyCor,
+        pathstr = "",
+        i,
+        pathLine,
+        circleArr = [],
+        xyCorlen = xy.length - 1,
+        circleElement;
+
+    //canvas.createPoly(svg,dataset);
+
+    for (i = 0; i < xyCorlen; i++) {
+        xyCor = xy[i].split(',');
+        if (i == 0) {
+            pathstr += "M" + xyCor[0] + "," + xyCor[1] + " ";
+        } else {
+            pathstr += "L" + xyCor[0] + "," + xyCor[1] + " ";
+        }
     }
-    var titleY_0 = titleY.toString().split(".")[0];
-    if (titleY_0.substring(0, 1) == '-') {
-      titleY_0 = Number(titleY_0.substring(1));
-      if (titleY_0 > 999 && titleY_0 < 999999) {
-        titleY = "-"+(titleY_0 / 1000).toFixed(1) + "K";
-      } else if (titleY_0 > 999999) {
-        titleY = "-"+(titleY_0 / 1000000).toFixed(1) + "M";
-      }
-    } else {
-      if (titleY_0 > 999 && titleY_0 < 999999) {
-        titleY = (titleY_0 / 1000).toFixed(1) + "K";
-      } else if (titleY_0 > 999999) {
-        titleY = (titleY_0 / 1000000).toFixed(1) + "M";
-      }
+
+    pathLine = canvas.createPath(svg, pathstr);
+
+    for (i = 0; i < xyCorlen; i++) {
+        xyCor = xy[i].split(',');
+        circleElement = canvas.createCirles(svg, xyCor[0], xyCor[1], radius);
+        circleElement.setAttribute("style", "visibility:hidden");
+        circleArr.push(circleElement);
+        axis.arr.push({
+            point: xyCor[0],
+            pointy: xyCor[1],
+            element: circleElement,
+            data: arr[i]
+        });
     }
-    return titleY;
+    axis.animatePath(pathLine);
+    axis.animateCircle(circleArr);
+    return axis.arr;
+
+};
+Xaxis.prototype.animateCircle = function(_circleArr) {
+    var i, 
+    	len = _circleArr.length,
+        time = 2000 / len;
+    for (i = 0; i < len; i++) {
+        //dealing with each circle element
+        (function(i) {
+            setTimeout(function() {
+                _circleArr[i].setAttribute("style", "visibility:visible");
+                _circleArr[i].setAttribute("r", "7");
+                _circleArr[i].setAttribute("style", "fill:#6de0d8");
+                setTimeout(function() {
+                    _circleArr[i].setAttribute("r", "5");
+                    _circleArr[i].setAttribute("style", "fill:#fff");
+                }, 300);
+
+            }, time * (i + 0.5));
+        })(i);
+    }
+};
+Xaxis.prototype.animatePath = function(_pathLine) {
+
+    var length = _pathLine.getTotalLength();
+    // Clear any previous transition
+    _pathLine.style.transition = _pathLine.style.WebkitTransition =
+        'none';
+    // Set up the starting positions
+    _pathLine.style.strokeDasharray = length + ' ' + length;
+    _pathLine.style.strokeDashoffset = length;
+    // Trigger a layout so styles are calculated & the browser
+    // picks up the starting position before animating
+    _pathLine.getBoundingClientRect();
+    // Define our transition
+    _pathLine.style.transition = _pathLine.style.WebkitTransition =
+        'stroke-dashoffset 2s ease-in-out';
+    // animating
+    _pathLine.style.strokeDashoffset = '0';
+}
+Xaxis.prototype.drawColumnData = function(dataset, width, arr) {
+    var axis = this,
+        svg = axis && axis.element, //svg in which the data will be ploted
+        canvas = axis && axis.canvas,
+        top = svg.getBoundingClientRect().top,
+        xy = dataset.split(" "),
+        width = (typeof width === "undefined") ? 10 : width,
+        xyCor,
+        barElement,
+        i,
+        tempObj,
+        xyCorlen = xy.length - 1;
+    for (i = 0; i < xyCorlen; i++) {
+        xyCor = xy[i].split(',');
+
+        tempObj = {
+            point: xyCor[0],
+            pointy: xyCor[1],
+            width: width,
+            height: xyCor[2],
+            pointx2: xyCor[3],
+            top: top,
+            data: arr[i]
+        };
+        barElement = axis.animateColumn(canvas, svg, tempObj);
+        // barElement = axis.animateColumn(canvas, svg, tempObj);
+
+        tempObj.element = barElement;
+        axis.arr.push(tempObj);
+    }
+
+    return axis.arr;
+};
+Xaxis.prototype.animateColumn = function(canvas, svg, obj) {
+    var _obj = obj,
+        _steps = 10,
+    	_x = Number(_obj && _obj.point),
+        _y = Number(_obj && _obj.pointy),
+        _height = Number(_obj && _obj.height),
+        _width = Number(_obj && _obj.width),
+        _y2 = _y + _height,
+        _divison = _height / _steps,
+        _tempY = _y2 - _divison,
+        _tempHeight = _divison,
+        id = "bar",
+        rectClass = id + "Class",
+        i,
+        barElement = canvas.createRect(svg, _x, _tempY, _tempHeight, _width, id, rectClass, "#096AB5");
+    for (i = 0; i < _steps; i++) {
+        (function(j) {
+            setTimeout(function() {
+                _tempY = _y2 - _divison*j;
+                _tempHeight = _divison*j;
+                barElement.setAttribute("y",_tempY);
+                barElement.setAttribute("height",_tempHeight);
+            }, j*10);     
+        })(i);
+    }
+    return barElement;
+};
+Xaxis.prototype.drawHairLine = function(x, y1, y2, id) {
+    var axis = this,
+        svg = axis && axis.element,
+        canvas = axis && axis.canvas,
+        classname = id + "Class",
+        hairline = canvas.createLines(svg, x, y1, x, (y1 + y2), classname, id);
+    hairline.setAttribute("visibility", "hidden");
+    return hairline;
 };

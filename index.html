@@ -1,26 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>CrossTab</title>
-  <script type="text/javascript" src="js/loadjson.js"></script>
-  <script type="text/javascript" src="js/dataParsing.js"></script>
-  <script type="text/javascript" src="js/engine.js"></script>
-  <script type="text/javascript" src="js/canvas.js"></script>
-  <script type="text/javascript" src="js/crosstab.js"></script>
-  <script type="text/javascript" src="js/yaxis.js"></script>
-  <script type="text/javascript" src="js/xaxis.js"></script>
-
-  <script type="text/javascript" src="js/listeners.js"></script>
-  <script type="text/javascript" src="js/lineChart.js"></script>
-  <script type="text/javascript" src="js/columnChart.js"></script>
-  <script type="text/javascript" src="js/headerCaption.js"></script>
-  <script type="text/javascript" src="js/chartBody.js"></script>
-  <script type="text/javascript" src="js/canvaschart.js"></script>
-  <script type="text/javascript" src="js/axis.js"></script>
-
-  <link type="text/css" href="css/style.css" rel="stylesheet"/>
-</head>
-<body>
-  <div class="chartContainer" id="chart"></div>
-</body>
+  <head>
+    <title>CrossTab</title>
+   <!-- build:js -->
+    <script type="text/javascript" src="js/axis.js"></script>
+    <script type="text/javascript" src="js/chart.js"></script>
+    <script type="text/javascript" src="js/parseData.js"></script>
+    <script type="text/javascript" src="js/canvas.js"></script>
+    <script type="text/javascript" src="js/engine.js"></script>
+    <script type="text/javascript" src="js/globalFunctions.js"></script>
+    <script type="text/javascript" src="js/crosstab.js"></script>
+    <script type="text/javascript" src="js/xaxis.js"></script>
+    <script type="text/javascript" src="js/yaxis.js"></script>
+    <script type="text/javascript" src="js/plotbody.js"></script>
+    <script type="text/javascript" src="js/line.js"></script>
+    <script type="text/javascript" src="js/column.js"></script>
+    
+    <!-- endbuild -->
+    <link type="text/css" href="style/style.css" rel="stylesheet"/>
+  </head>
+  <body>
+  <script type="text/javascript">
+      var xmlhttp= new XMLHttpRequest(),
+          mychart,
+          chart,
+          customFunction = function(dataObj){
+            var chartOrder,
+            _dataArr = dataObj;
+            //should return an array of orders
+            return chartOrder;
+          };
+      xmlhttp.onreadystatechange = function(){   
+        if ( xmlhttp.readyState === 4 && xmlhttp.status === 200 ) {
+          mychart = new ParseData(JSON.parse(xmlhttp.responseText));
+          chart = new Engine(mychart);
+          chart.render("line",customFunction);
+        }
+      };
+      xmlhttp.open('GET','json/data.json',true);
+      xmlhttp.send();
+  </script>
+    <div class="chartContainer" id="chart"></div>
+  </body>
 </html>
