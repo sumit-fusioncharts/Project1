@@ -1,0 +1,32 @@
+{
+  "name": "simplechart",
+  "version": "1.0.0",
+  "description": "simple line and column chart using vanillaJS, JSON, SVG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sumit-fusioncharts/SimpleChart.git"
+  },
+  "keywords": [
+    "simplechart",
+    "line",
+    "column",
+    "chart",
+    "jschart",
+    "multiple",
+    "charts",
+    "canvas"
+  ],
+  "author": "Sumit Pal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sumit-fusioncharts/SimpleChart/issues"
+  },
+  "homepage": "https://github.com/sumit-fusioncharts/SimpleChart#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
